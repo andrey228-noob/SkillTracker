@@ -10,7 +10,19 @@
     "tabWidth": 4,
     "overrides": [
         {
-            "files": "**/*.yml",
+            "files": "**/*.{js,jsx,ts,tsx}",
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": "**/*.{yml,yaml}",
+            "options": {
+                "tabWidth": 2
+            }
+        },
+        {
+            "files": "**/*.css",
             "options": {
                 "tabWidth": 2
             }
