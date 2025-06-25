@@ -1,4 +1,3 @@
-// Components
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
@@ -19,21 +18,33 @@ export default function VerifyEmail({ status }) {
     <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
       <Head title="Email verification" />
 
+      <div className="auth-form__description">
+        Thanks for signing up! Before getting started, could you verify your email address by clicking on the
+        link we just emailed to you? If you didn't receive the email, we will gladly send you another.
+      </div>
+
       {status === 'verification-link-sent' && (
-        <div className="mb-4 text-center text-sm font-medium text-green-600">
+        <div className="auth-form__status auth-form__status--success">
           A new verification link has been sent to the email address you provided during registration.
         </div>
       )}
 
-      <form onSubmit={submit} className="space-y-6 text-center">
-        <Button disabled={processing} variant="secondary">
-          {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-          Resend verification email
-        </Button>
+      <form className="auth-form" onSubmit={submit}>
+        <div className="auth-form__actions">
+          <Button className="auth-form__submit auth-form__submit--verify" disabled={processing}>
+            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            Resend Verification Email
+          </Button>
 
-        <TextLink href={route('logout')} method="post" className="mx-auto block text-sm">
-          Log out
-        </TextLink>
+          <TextLink
+            href={route('logout')}
+            method="post"
+            as="button"
+            className="auth-form__link auth-form__link--logout"
+          >
+            Log Out
+          </TextLink>
+        </div>
       </form>
     </AuthLayout>
   );

@@ -1,0 +1,104 @@
+/* Settings pages styles - БЭМ методология */
+
+.settings {
+  gap: 1.5rem;
+}
+
+.settings__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.settings__input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+}
+
+.settings__error {
+  margin-top: 0.5rem;
+}
+
+.settings__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.settings__success-message {
+  font-size: 0.875rem;
+  color: #525252;
+}
+
+/* Profile settings specific styles */
+.settings__verification-notice {
+  margin-top: -1rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.settings__verification-link {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: #d4d4d8;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 300ms ease-out;
+}
+
+.settings__verification-link:hover {
+  text-decoration-color: currentColor !important;
+}
+
+.dark .settings__verification-link {
+  text-decoration-color: #71717a;
+}
+
+.settings__verification-success {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #16a34a;
+}
+
+/* Password settings specific styles */
+.settings__password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings__password-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.settings__password-input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+}
+
+.settings__password-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Appearance settings specific styles */
+.settings__appearance-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
