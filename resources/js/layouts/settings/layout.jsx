@@ -43,7 +43,7 @@ export default function SettingsLayout({ children }) {
                 size="sm"
                 variant="ghost"
                 asChild
-                className={cn('w-full justify-start', {
+                className={cn('settings-nav__button', {
                   'bg-muted': currentPath === item.href,
                 })}
               >

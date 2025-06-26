@@ -1,5 +1,5 @@
-import AppLogoIcon from '@/components/app-logo-icon';
 import { Link } from '@inertiajs/react';
+import AppLogoIcon from '@/components/app-logo-icon';
 
 export default function AuthSimpleLayout({ children, title, description }) {
   return (
@@ -9,7 +9,7 @@ export default function AuthSimpleLayout({ children, title, description }) {
           <div className="auth-simple-layout__header">
             <Link href={route('home')} className="auth-simple-layout__logo-link">
               <div className="auth-simple-layout__logo-container">
-                <AppLogoIcon className="size-9 fill-current text-[var(--foreground)] dark:text-white" />
+                <AppLogoIcon className="auth-simple-layout__logo-icon" />
               </div>
               <span className="sr-only">{title}</span>
             </Link>

@@ -776,3 +776,14 @@
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Appearance Dropdown */
+.appearance-dropdown__icon {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+/* User Menu */
+.user-menu-content {
+  width: 14rem;
+}

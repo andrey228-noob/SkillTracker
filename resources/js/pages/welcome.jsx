@@ -757,11 +757,11 @@ export default function Welcome() {
                   />
                 </g>
               </svg>
-              <div className="absolute inset-0 rounded-t-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] lg:rounded-t-none lg:rounded-r-lg dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]" />
+              <div className="welcome__image-overlay" />
             </div>
           </main>
         </div>
-        <div className="hidden h-14.5 lg:block"></div>
+        <div className="welcome__spacer"></div>
       </div>
     </>
   );

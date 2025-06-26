@@ -1,6 +1,7 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
+import AppLogoIcon from '@/components/app-logo-icon';
 
 export default function AuthCardLayout({
   children,
@@ -12,17 +13,17 @@ export default function AuthCardLayout({
       <div className="auth-card-layout__container">
         <Link href={route('home')} className="auth-card-layout__logo-link">
           <div className="auth-card-layout__logo-container">
-            <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
+            <AppLogoIcon className="auth-card-layout__logo-icon" />
           </div>
         </Link>
 
         <div className="auth-card-layout__content">
-          <Card className="rounded-xl">
-            <CardHeader className="px-10 pt-8 pb-0 text-center">
-              <CardTitle className="text-xl">{title}</CardTitle>
+          <Card className="auth-card-layout__card">
+            <CardHeader className="auth-card-layout__card-header">
+              <CardTitle className="auth-card-layout__card-title">{title}</CardTitle>
               <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent className="px-10 py-8">{children}</CardContent>
+            <CardContent className="auth-card-layout__card-content">{children}</CardContent>
           </Card>
         </div>
       </div>

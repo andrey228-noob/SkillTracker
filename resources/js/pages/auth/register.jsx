@@ -42,7 +42,7 @@ export default function Register() {
               disabled={processing}
               placeholder="Full name"
             />
-            <InputError message={errors.name} className="mt-2" />
+            <InputError message={errors.name} className="auth-form__error" />
           </div>
 
           <div className="auth-form__field">
@@ -94,7 +94,7 @@ export default function Register() {
           </div>
 
           <Button type="submit" className="auth-form__submit auth-form__submit--register" tabIndex={5} disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            {processing && <LoaderCircle className="auth-form__spinner" />}
             Create account
           </Button>
         </div>

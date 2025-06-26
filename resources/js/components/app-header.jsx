@@ -156,7 +156,7 @@ export function AppHeader({ breadcrumbs = [] }) {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuContent className="user-menu-content" align="end">
                 <UserMenuContent user={auth.user} />
               </DropdownMenuContent>
             </DropdownMenu>

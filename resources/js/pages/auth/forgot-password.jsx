@@ -24,9 +24,9 @@ export default function ForgotPassword({ status }) {
     <AuthLayout title="Forgot password" description="Enter your email to receive a password reset link">
       <Head title="Forgot password" />
 
-      {status && <div className="mb-4 text-center text-sm font-medium text-green-600">{status}</div>}
+      {status && <div className="auth-form__status-message">{status}</div>}
 
-      <div className="space-y-6">
+      <div className="auth-form__content">
         <form className="auth-form" onSubmit={submit}>
           <div className="auth-form__grid">
             <div className="auth-form__field">
@@ -43,9 +43,9 @@ export default function ForgotPassword({ status }) {
               <InputError message={errors.email} />
             </div>
 
-            <div className="my-6 flex items-center justify-start">
+            <div className="auth-form__actions">
               <Button className="auth-form__submit auth-form__submit--forgot" disabled={processing}>
-                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                {processing && <LoaderCircle className="auth-form__spinner" />}
                 Email password reset link
               </Button>
             </div>

@@ -327,3 +327,31 @@
   transform: translateY(1.5rem);
   opacity: 0;
 }
+
+.welcome__image-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.5rem 0.5rem 0 0;
+  box-shadow: inset 0px 0px 0px 1px rgba(26, 26, 0, 0.16);
+}
+
+@media (min-width: 1024px) {
+  .welcome__image-overlay {
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+}
+
+.dark .welcome__image-overlay {
+  box-shadow: inset 0px 0px 0px 1px #fffaed2d;
+}
+
+.welcome__spacer {
+  display: none;
+  height: 3.625rem;
+}
+
+@media (min-width: 1024px) {
+  .welcome__spacer {
+    display: block;
+  }
+}

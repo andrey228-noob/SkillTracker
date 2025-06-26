@@ -78,7 +78,7 @@ export default function ResetPassword({ token, email }) {
           </div>
 
           <Button type="submit" className="auth-form__submit auth-form__submit--reset" tabIndex={4} disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            {processing && <LoaderCircle className="auth-form__spinner" />}
             Reset password
           </Button>
         </div>

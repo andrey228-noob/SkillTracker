@@ -32,7 +32,7 @@ export default function VerifyEmail({ status }) {
       <form className="auth-form" onSubmit={submit}>
         <div className="auth-form__actions">
           <Button className="auth-form__submit auth-form__submit--verify" disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            {processing && <LoaderCircle className="auth-form__spinner" />}
             Resend Verification Email
           </Button>
 

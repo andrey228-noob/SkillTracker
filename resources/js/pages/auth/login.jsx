@@ -79,7 +79,7 @@ export default function Login({ status, canResetPassword }) {
           </div>
 
           <Button type="submit" className="auth-form__submit" tabIndex={4} disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            {processing && <LoaderCircle className="auth-form__spinner" />}
             Log in
           </Button>
         </div>

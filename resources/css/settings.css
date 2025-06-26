@@ -49,6 +49,73 @@
   color: var(--muted-foreground);
 }
 
+/* Settings Form */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings-form__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.settings-form__input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+}
+
+.settings-form__unverified-text {
+  margin-top: -1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--muted-foreground);
+}
+
+.settings-form__verification-link {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: rgb(212 212 212);
+  text-underline-offset: 4px;
+  transition: color 0.3s ease-out;
+}
+
+.settings-form__verification-link:hover {
+  text-decoration-color: currentColor;
+}
+
+.dark .settings-form__verification-link {
+  text-decoration-color: rgb(115 115 115);
+}
+
+.settings-form__success-message {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: rgb(34 197 94);
+}
+
+.settings-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.settings-form__saved-text {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(115 115 115);
+}
+
 .settings__verification-link {
   color: var(--foreground);
   text-decoration: underline;
@@ -101,4 +168,13 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.settings-form__error {
+  margin-top: 0.5rem;
+}
+
+.settings-nav__button {
+  width: 100%;
+  justify-content: flex-start;
 }
