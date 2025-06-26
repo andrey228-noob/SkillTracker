@@ -1,10 +1,17 @@
 @import 'tailwindcss';
-@import './button.css';
 
 @plugin 'tailwindcss-animate';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+/* Import custom CSS files for pages */
+@import './dashboard.css';
+@import './auth.css';
+@import './settings.css';
+@import './welcome.css';
+@import './layouts.css';
+@import './components.css';
 
 @custom-variant dark (&:is(.dark *));
 

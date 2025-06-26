@@ -1,7 +1,6 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -10,51 +9,50 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function ConfirmPassword() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<{ password: string }>>({
-        password: '',
+  const { data, setData, post, processing, errors, reset } = useForm < Required({
+    password: '',
+  });
+
+  const submit = (e) => {
+    e.preventDefault();
+
+    post(route('password.confirm'), {
+      onFinish: () => reset('password'),
     });
+  };
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
+  return (
+    <AuthLayout
+      title="Confirm your password"
+      description="This is a secure area of the application. Please confirm your password before continuing."
+    >
+      <Head title="Confirm password" />
 
-        post(route('password.confirm'), {
-            onFinish: () => reset('password'),
-        });
-    };
+      <form className="auth-form" onSubmit={submit}>
+        <div className="auth-form__grid">
+          <div className="auth-form__field">
+            <Label htmlFor="password">Password</Label>
 
-    return (
-        <AuthLayout
-            title="Confirm your password"
-            description="This is a secure area of the application. Please confirm your password before continuing."
-        >
-            <Head title="Confirm password" />
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              value={data.password}
+              autoFocus
+              onChange={(e) => setData('password', e.target.value)}
+            />
 
-            <form onSubmit={submit}>
-                <div className="space-y-6">
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            autoComplete="current-password"
-                            value={data.password}
-                            autoFocus
-                            onChange={(e) => setData('password', e.target.value)}
-                        />
+            <InputError message={errors.password} />
+          </div>
 
-                        <InputError message={errors.password} />
-                    </div>
-
-                    <div className="flex items-center">
-                        <Button className="w-full" disabled={processing}>
-                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                            Confirm password
-                        </Button>
-                    </div>
-                </div>
-            </form>
-        </AuthLayout>
-    );
+          <div className="auth-form__actions">
+            <Button className="auth-form__submit auth-form__submit--confirm" disabled={processing}>
+              {processing && <LoaderCircle className="auth-form__spinner" />}
+              Confirm password
+            </Button>
+          </div>
+        </div>
+      </form>
+    </AuthLayout>
+  );
 }

@@ -19,7 +19,11 @@ export default function Appearance() {
       <Head title="Appearance settings" />
 
       <SettingsLayout>
-        <div className="space-y-6">
+        <div className="settings-form">
+          {/* <div className="settings-form__header">
+            <h2 className="settings-form__title">Appearance settings</h2>
+            <p className="settings-form__description">Update your account's appearance settings</p>
+          </div> */}
           <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
           <AppearanceTabs />
         </div>

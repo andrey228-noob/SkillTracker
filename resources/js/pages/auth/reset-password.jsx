@@ -26,56 +26,59 @@ export default function ResetPassword({ token, email }) {
     <AuthLayout title="Reset password" description="Please enter your new password below">
       <Head title="Reset password" />
 
-      <form onSubmit={submit}>
-        <div className="grid gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+      <form className="auth-form" onSubmit={submit}>
+        <div className="auth-form__grid">
+          <div className="auth-form__field">
+            <Label htmlFor="email">Email address</Label>
             <Input
               id="email"
               type="email"
-              name="email"
+              required
+              autoFocus
+              tabIndex={1}
               autoComplete="email"
               value={data.email}
-              className="mt-1 block w-full"
-              readOnly
               onChange={(e) => setData('email', e.target.value)}
+              disabled={processing}
+              placeholder="email@example.com"
             />
-            <InputError message={errors.email} className="mt-2" />
+            <InputError message={errors.email} />
           </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+          <div className="auth-form__field">
+            <Label htmlFor="password">New password</Label>
             <Input
               id="password"
               type="password"
-              name="password"
+              required
+              tabIndex={2}
               autoComplete="new-password"
               value={data.password}
-              className="mt-1 block w-full"
-              autoFocus
               onChange={(e) => setData('password', e.target.value)}
-              placeholder="Password"
+              disabled={processing}
+              placeholder="New password"
             />
             <InputError message={errors.password} />
           </div>
 
-          <div className="grid gap-2">
+          <div className="auth-form__field">
             <Label htmlFor="password_confirmation">Confirm password</Label>
             <Input
               id="password_confirmation"
               type="password"
-              name="password_confirmation"
+              required
+              tabIndex={3}
               autoComplete="new-password"
               value={data.password_confirmation}
-              className="mt-1 block w-full"
               onChange={(e) => setData('password_confirmation', e.target.value)}
+              disabled={processing}
               placeholder="Confirm password"
             />
-            <InputError message={errors.password_confirmation} className="mt-2" />
+            <InputError message={errors.password_confirmation} />
           </div>
 
-          <Button type="submit" className="mt-4 w-full" disabled={processing}>
-            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+          <Button type="submit" className="auth-form__submit auth-form__submit--reset" tabIndex={4} disabled={processing}>
+            {processing && <LoaderCircle className="auth-form__spinner" />}
             Reset password
           </Button>
         </div>

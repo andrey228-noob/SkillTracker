@@ -1,31 +1,32 @@
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
+import AppLogoIcon from '@/components/app-logo-icon';
 
 export default function AuthCardLayout({
-    children,
-    title,
-    description,
+  children,
+  title,
+  description,
 }) {
-    return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
-            <div className="flex w-full max-w-md flex-col gap-6">
-                <Link href={route('home')} className="flex items-center gap-2 self-center font-medium">
-                    <div className="flex h-9 w-9 items-center justify-center">
-                        <AppLogoIcon className="size-9 fill-current text-black dark:text-white" />
-                    </div>
-                </Link>
+  return (
+    <div className="auth-card-layout">
+      <div className="auth-card-layout__container">
+        <Link href={route('home')} className="auth-card-layout__logo-link">
+          <div className="auth-card-layout__logo-container">
+            <AppLogoIcon className="auth-card-layout__logo-icon" />
+          </div>
+        </Link>
 
-                <div className="flex flex-col gap-6">
-                    <Card className="rounded-xl">
-                        <CardHeader className="px-10 pt-8 pb-0 text-center">
-                            <CardTitle className="text-xl">{title}</CardTitle>
-                            <CardDescription>{description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="px-10 py-8">{children}</CardContent>
-                    </Card>
-                </div>
-            </div>
+        <div className="auth-card-layout__content">
+          <Card className="auth-card-layout__card">
+            <CardHeader className="auth-card-layout__card-header">
+              <CardTitle className="auth-card-layout__card-title">{title}</CardTitle>
+              <CardDescription>{description}</CardDescription>
+            </CardHeader>
+            <CardContent className="auth-card-layout__card-content">{children}</CardContent>
+          </Card>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
