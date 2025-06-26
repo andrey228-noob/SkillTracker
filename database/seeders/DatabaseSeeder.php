@@ -2,22 +2,30 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\Models\Test;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-        // User::factory(10)->create();
+        // Запускаем сидеры пользователей и тестов
+        $this->call(UserSeeder::class);
+        $this->call(TestSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Получаем всех работников и тесты
+        $workers = User::where('role', 'worker')->get();
+        $tests = Test::all();
+
+        // Связываем работников с тестами
+        foreach ($workers as $worker) {
+            foreach ($tests as $test) {
+                $worker->testResults()->firstOrCreate([
+                    'test_id' => $test->id,
+                    'score' => rand(0, 100), // Генерируем случайный балл
+                ]);
+            }
+        }
     }
 }
