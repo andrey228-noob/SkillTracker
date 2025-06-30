@@ -51,8 +51,20 @@ class User extends Authenticatable
     }
     
     // Определяем связь с результатами тестов
-     public function testResults(): HasMany
-     {
-         return $this->hasMany(TestResult::class);
-     }
+    public function testResults(): HasMany
+    {
+        return $this->hasMany(TestResult::class);
+    }
+    
+    // Определяем связь с задачами (для работника)
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+    
+    // Определяем связь с задачами (для менеджера)
+    public function assignedTasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'manager_id');
+    }
 }

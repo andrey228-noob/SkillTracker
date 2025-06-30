@@ -12,6 +12,21 @@ const mainNavItems = [
     href: '/dashboard',
     icon: LayoutGrid,
   },
+  {
+    title: 'Users',
+    href: '/users',
+    icon: LayoutGrid,
+  },
+  {
+    title: 'My Tasks',
+    href: '/worker/tasks',
+    icon: LayoutGrid,
+  },
+  {
+    title: 'My Tests',
+    href: '/worker/tests',
+    icon: LayoutGrid,
+  },
 ];
 
 const footerNavItems = [

@@ -6,6 +6,7 @@ import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AuthLayout from '@/layouts/auth-layout';
 
 export default function Register() {
@@ -14,6 +15,7 @@ export default function Register() {
     email: '',
     password: '',
     password_confirmation: '',
+    role: null, // Добавляем роль по умолчанию
   });
 
   const submit = (e) => {
@@ -62,12 +64,30 @@ export default function Register() {
           </div>
 
           <div className="auth-form__field">
+            <Label htmlFor="role">Role</Label>
+            <Select 
+              value={data.role} 
+              onValueChange={(value) => setData('role', value)}
+              disabled={processing}
+            >
+              <SelectTrigger id="role" tabIndex={3}>
+                <SelectValue placeholder="Select role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="worker">Worker</SelectItem>
+                <SelectItem value="manager">Manager</SelectItem>
+              </SelectContent>
+            </Select>
+            <InputError message={errors.role} />
+          </div>
+
+          <div className="auth-form__field">
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
               required
-              tabIndex={3}
+              tabIndex={4}
               autoComplete="new-password"
               value={data.password}
               onChange={(e) => setData('password', e.target.value)}
@@ -83,7 +103,7 @@ export default function Register() {
               id="password_confirmation"
               type="password"
               required
-              tabIndex={4}
+              tabIndex={5}
               autoComplete="new-password"
               value={data.password_confirmation}
               onChange={(e) => setData('password_confirmation', e.target.value)}
@@ -93,7 +113,7 @@ export default function Register() {
             <InputError message={errors.password_confirmation} />
           </div>
 
-          <Button type="submit" className="auth-form__submit auth-form__submit--register" tabIndex={5} disabled={processing}>
+          <Button type="submit" className="auth-form__submit auth-form__submit--register" tabIndex={6} disabled={processing}>
             {processing && <LoaderCircle className="auth-form__spinner" />}
             Create account
           </Button>
@@ -101,7 +121,7 @@ export default function Register() {
 
         <div className="auth-form__footer">
           Already have an account?{' '}
-          <TextLink href={route('login')} tabIndex={6}>
+          <TextLink href={route('login')} tabIndex={7}>
             Log in
           </TextLink>
         </div>

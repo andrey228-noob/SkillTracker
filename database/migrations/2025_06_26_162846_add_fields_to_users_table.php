@@ -9,7 +9,7 @@ class AddFieldsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['worker', 'manager'])->default('worker'); // Роль
+            $table->enum('role', ['worker', 'manager', 'admin'])->default('worker'); // Роль
             $table->enum('gender', ['male', 'female'])->nullable(); // Пол
             $table->string('phone')->nullable(); // Номер телефона
         });
