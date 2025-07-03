@@ -19,10 +19,10 @@ export default function Dashboard({ stats }) {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Dashboard" />
-      <div className="dashboard">
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
         <h1 className="text-2xl font-bold mb-6">Welcome, {auth.user.name}</h1>
-        
-        <div className="dashboard__grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 auto-rows-min">
           {isManager ? (
             // Manager Dashboard Cards
             <>
@@ -42,7 +42,7 @@ export default function Dashboard({ stats }) {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">Assigned Tasks</CardTitle>
@@ -59,7 +59,7 @@ export default function Dashboard({ stats }) {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">Completed Tests</CardTitle>
@@ -96,7 +96,7 @@ export default function Dashboard({ stats }) {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">Available Tests</CardTitle>
@@ -113,7 +113,7 @@ export default function Dashboard({ stats }) {
                   </Button>
                 </CardFooter>
               </Card>
-              
+
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium">My Average Score</CardTitle>
@@ -130,8 +130,8 @@ export default function Dashboard({ stats }) {
             </>
           )}
         </div>
-        
-        <div className="dashboard__main-content">
+
+        <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
           <Card>
             <CardHeader>
               <CardTitle>{isManager ? 'Recent Activity' : 'My Progress'}</CardTitle>
@@ -141,7 +141,7 @@ export default function Dashboard({ stats }) {
             </CardHeader>
             <CardContent>
               {/* Здесь будет содержимое в зависимости от роли */}
-              <PlaceholderPattern className="dashboard__main-pattern h-64" />
+              <PlaceholderPattern className="absolute inset-0 w-full [&>svg]:stroke-[rgba(26,26,0,0.2)] dark:[&>svg]:stroke-[rgba(255,255,255,0.2)] h-64" />
             </CardContent>
           </Card>
         </div>

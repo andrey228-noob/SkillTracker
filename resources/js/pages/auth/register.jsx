@@ -1,13 +1,12 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
-
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+import InputError from '@/components/shared/input-error';
+import TextLink from '@/components/shared/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import AuthLayout from '@/layouts/auth-layout';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function Register() {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -28,9 +27,9 @@ export default function Register() {
   return (
     <AuthLayout title="Create an account" description="Enter your details below to create your account">
       <Head title="Register" />
-      <form className="auth-form" onSubmit={submit}>
-        <div className="auth-form__grid">
-          <div className="auth-form__field">
+      <form className="flex flex-col gap-6" onSubmit={submit}>
+        <div className="grid gap-6">
+          <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
@@ -44,10 +43,10 @@ export default function Register() {
               disabled={processing}
               placeholder="Full name"
             />
-            <InputError message={errors.name} className="auth-form__error" />
+            <InputError message={errors.name} className="mt-2" />
           </div>
 
-          <div className="auth-form__field">
+          <div className="grid gap-2">
             <Label htmlFor="email">Email address</Label>
             <Input
               id="email"
@@ -63,10 +62,10 @@ export default function Register() {
             <InputError message={errors.email} />
           </div>
 
-          <div className="auth-form__field">
+          <div className="grid gap-2">
             <Label htmlFor="role">Role</Label>
-            <Select 
-              value={data.role} 
+            <Select
+              value={data.role}
               onValueChange={(value) => setData('role', value)}
               disabled={processing}
             >
@@ -97,7 +96,7 @@ export default function Register() {
             <InputError message={errors.password} />
           </div>
 
-          <div className="auth-form__field">
+          <div className="grid gap-2">
             <Label htmlFor="password_confirmation">Confirm password</Label>
             <Input
               id="password_confirmation"
@@ -113,13 +112,13 @@ export default function Register() {
             <InputError message={errors.password_confirmation} />
           </div>
 
-          <Button type="submit" className="auth-form__submit auth-form__submit--register" tabIndex={6} disabled={processing}>
-            {processing && <LoaderCircle className="auth-form__spinner" />}
+          <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
             Create account
           </Button>
         </div>
 
-        <div className="auth-form__footer">
+        <div className="text-center text-sm text-muted-foreground">
           Already have an account?{' '}
           <TextLink href={route('login')} tabIndex={7}>
             Log in

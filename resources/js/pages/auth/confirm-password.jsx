@@ -2,7 +2,7 @@
 import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
-import InputError from '@/components/input-error';
+import InputError from '@/components/shared/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,15 +28,16 @@ export default function ConfirmPassword() {
     >
       <Head title="Confirm password" />
 
-      <form className="auth-form" onSubmit={submit}>
-        <div className="auth-form__grid">
-          <div className="auth-form__field">
+      <form onSubmit={submit}>
+        <div className="space-y-6">
+          <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-
             <Input
               id="password"
               type="password"
               name="password"
+              placeholder="Password"
+              autoComplete="current-password"
               value={data.password}
               autoFocus
               onChange={(e) => setData('password', e.target.value)}
@@ -45,9 +46,9 @@ export default function ConfirmPassword() {
             <InputError message={errors.password} />
           </div>
 
-          <div className="auth-form__actions">
-            <Button className="auth-form__submit auth-form__submit--confirm" disabled={processing}>
-              {processing && <LoaderCircle className="auth-form__spinner" />}
+          <div className="flex items-center">
+            <Button className="w-full" disabled={processing}>
+              {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
               Confirm password
             </Button>
           </div>

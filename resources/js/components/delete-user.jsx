@@ -1,12 +1,12 @@
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
 
-import InputError from '@/components/input-error';
+import InputError from '@/components/shared/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import HeadingSmall from '@/components/heading-small';
+import HeadingSmall from '@/components/shared/heading-small';
 
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
@@ -31,12 +31,12 @@ export default function DeleteUser() {
   };
 
   return (
-    <div className="delete-user">
+    <div className="space-y-6">
       <HeadingSmall title="Delete account" description="Delete your account and all of its resources" />
-      <div className="delete-user__warning">
-        <div className="delete-user__warning-content">
-          <p className="delete-user__warning-title">Warning</p>
-          <p className="delete-user__warning-text">Please proceed with caution, this cannot be undone.</p>
+      <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
+        <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
+          <p className="font-medium">Warning</p>
+          <p className="text-sm">Please proceed with caution, this cannot be undone.</p>
         </div>
 
         <Dialog>
@@ -49,8 +49,8 @@ export default function DeleteUser() {
               Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password
               to confirm you would like to permanently delete your account.
             </DialogDescription>
-            <form className="delete-user__form" onSubmit={deleteUser}>
-              <div className="delete-user__input-group">
+            <form className="space-y-6" onSubmit={deleteUser}>
+              <div className="grid gap-2">
                 <Label htmlFor="password" className="sr-only">
                   Password
                 </Label>
@@ -69,7 +69,7 @@ export default function DeleteUser() {
                 <InputError message={errors.password} />
               </div>
 
-              <DialogFooter className="delete-user__footer">
+              <DialogFooter className="gap-2">
                 <DialogClose asChild>
                   <Button variant="secondary" onClick={closeModal}>
                     Cancel

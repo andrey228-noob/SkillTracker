@@ -25,7 +25,7 @@ const breadcrumbs = [
   },
   {
     title: 'User Details',
-    href: '#',
+    href: '/#',
   },
 ];
 
