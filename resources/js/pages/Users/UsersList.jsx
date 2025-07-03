@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 const breadcrumbs = [
   {
@@ -22,9 +22,9 @@ const breadcrumbs = [
 
 export default function UsersList({ users }) {
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+
+  const filteredUsers = users.filter(user =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -49,7 +49,7 @@ export default function UsersList({ users }) {
             </div>
           </CardHeader>
           <CardContent>
-            {/* <Table>
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
@@ -81,7 +81,7 @@ export default function UsersList({ users }) {
                     <TableCell>{user.tasks_count || 0}</TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="ghost" size="sm">
-                        <Link href={`/manager/users/${user.id}`}>View</Link>
+                        <Link href={`/users/${user.id}`}>View</Link>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -94,7 +94,7 @@ export default function UsersList({ users }) {
                   </TableRow>
                 )}
               </TableBody>
-            </Table> */}
+            </Table>
           </CardContent>
         </Card>
       </div>

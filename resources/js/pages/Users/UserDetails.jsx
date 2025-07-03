@@ -21,7 +21,7 @@ const breadcrumbs = [
   },
   {
     title: 'Users',
-    href: '/manager/users',
+    href: '/users',
   },
   {
     title: 'User Details',
@@ -49,9 +49,11 @@ export default function UserDetails({ user, tests, tasks }) {
     status: '',
   });
 
+  const { delete: destroy } = useForm();
+
   const submitTask = (e) => {
     e.preventDefault();
-    post(route('manager.tasks.store'), {
+    post(route('tasks.store'), {
       onSuccess: () => {
         reset();
         setIsAddTaskOpen(false);
@@ -61,7 +63,7 @@ export default function UserDetails({ user, tests, tasks }) {
 
   const submitEditTask = (e) => {
     e.preventDefault();
-    put(route('manager.tasks.update', editData.id), {
+    put(route('tasks.update', editData.id), {
       onSuccess: () => {
         resetEdit();
         setIsEditTaskOpen(false);
@@ -79,6 +81,16 @@ export default function UserDetails({ user, tests, tasks }) {
       status: task.status,
     });
     setIsEditTaskOpen(true);
+  };
+
+  const deleteTask = (task) => {
+    if (confirm('Are you sure you want to delete this task?')) {
+      destroy(route('tasks.destroy', task.id), {
+        onSuccess: () => {
+          // Можно добавить дополнительную логику после успешного удаления
+        },
+      });
+    }
   };
 
   const getStatusBadge = (status) => {
@@ -147,7 +159,7 @@ export default function UserDetails({ user, tests, tasks }) {
             <TabsTrigger value="tasks">Tasks</TabsTrigger>
             <TabsTrigger value="tests">Tests</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="tasks" className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-semibold">Tasks</h2>
@@ -240,7 +252,7 @@ export default function UserDetails({ user, tests, tasks }) {
                             <Button variant="ghost" size="icon" onClick={() => openEditTask(task)}>
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="text-red-500">
+                            <Button variant="ghost" size="icon" className="text-red-500" onClick={() => deleteTask(task)}>
                               <Trash className="h-4 w-4" />
                             </Button>
                           </div>
@@ -302,8 +314,8 @@ export default function UserDetails({ user, tests, tasks }) {
                     </div>
                     <div className="grid gap-2">
                       <Label htmlFor="edit-status">Status</Label>
-                      <Select 
-                        value={editData.status} 
+                      <Select
+                        value={editData.status}
                         onValueChange={(value) => setEditData('status', value)}
                       >
                         <SelectTrigger id="edit-status">
@@ -331,7 +343,7 @@ export default function UserDetails({ user, tests, tasks }) {
               </DialogContent>
             </Dialog>
           </TabsContent>
-          
+
           <TabsContent value="tests" className="space-y-4">
             <h2 className="text-xl font-semibold">Test Results</h2>
             <Card>

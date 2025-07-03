@@ -14,13 +14,31 @@ class TestSeeder extends Seeder
                 'slug' => 'test-1',
                 'title' => 'Тест по программированию',
                 'description' => 'Проверьте свои знания в программировании.',
-                'options' => json_encode(['option1' => 'Ответ 1', 'option2' => 'Ответ 2', 'option3' => 'Ответ 3']),
+                'options' => [
+                    'question' => 'Какой язык программирования является статически типизированным?',
+                    'answers' => [
+                        ['value' => 'python', 'text' => 'Python'],
+                        ['value' => 'javascript', 'text' => 'JavaScript'],
+                        ['value' => 'typescript', 'text' => 'TypeScript'],
+                        ['value' => 'ruby', 'text' => 'Ruby']
+                    ],
+                    'correct' => 'typescript'
+                ],
             ],
             [
                 'slug' => 'test-2',
                 'title' => 'Тест по математике',
                 'description' => 'Проверьте свои математические навыки.',
-                'options' => json_encode(['option1' => 'Ответ A', 'option2' => 'Ответ B', 'option3' => 'Ответ C']),
+                'options' => [
+                    'question' => 'Чему равно 2 + 2 × 2?',
+                    'answers' => [
+                        ['value' => '6', 'text' => '6'],
+                        ['value' => '8', 'text' => '8'],
+                        ['value' => '4', 'text' => '4'],
+                        ['value' => '10', 'text' => '10']
+                    ],
+                    'correct' => '6'
+                ],
             ],
             [
                 'slug' => 'test-3',
@@ -62,7 +80,14 @@ class TestSeeder extends Seeder
         ];
 
         foreach ($tests as $test) {
-            Test::firstOrCreate($test);
+            Test::firstOrCreate(
+                ['slug' => $test['slug']],
+                [
+                    'title' => $test['title'],
+                    'description' => $test['description'],
+                    'options' => $test['options'] // Laravel автоматически конвертирует массив в JSON
+                ]
+            );
         }
     }
 }

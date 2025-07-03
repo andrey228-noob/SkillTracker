@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-// import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const breadcrumbs = [
@@ -86,13 +86,13 @@ export default function Tasks({ tasks }) {
       <Head title="My Tasks" />
       <div className="tasks-page space-y-6">
         <h1 className="text-2xl font-bold">My Tasks</h1>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Assigned Tasks</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            {/* <Table>
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
@@ -119,9 +119,9 @@ export default function Tasks({ tasks }) {
                         <Button variant="ghost" size="icon" onClick={() => openViewTask(task)}>
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => openUpdateStatus(task)}
                           disabled={['completed', 'rejected'].includes(task.status)}
                         >
@@ -139,7 +139,7 @@ export default function Tasks({ tasks }) {
                   </TableRow>
                 )}
               </TableBody>
-            </Table> */}
+            </Table>
           </CardContent>
         </Card>
 
@@ -209,8 +209,8 @@ export default function Tasks({ tasks }) {
                 </div>
                 <div>
                   <h3 className="text-sm font-medium mb-2">New Status</h3>
-                  <Select 
-                    value={data.status} 
+                  <Select
+                    value={data.status}
                     onValueChange={(value) => setData('status', value)}
                   >
                     <SelectTrigger>

@@ -18,22 +18,21 @@ class TestController extends Controller
     public function index()
     {
         $user = Auth::user();
-        
+
         // Получаем все тесты для менеджеров и администраторов
         // или только назначенные тесты для работников
         if (in_array($user->role, ['manager', 'admin'])) {
             $tests = Test::all();
-            
+
             // Для администраторов и менеджеров также получаем всех работников
             $workers = User::where('role', 'worker')
                 ->select('id', 'name', 'email')
                 ->get();
-                
+
             // Получаем все результаты тестов
             $results = TestResult::with(['user:id,name', 'test:id,title'])
-                ->get()
-                ->groupBy('test_id');
-                
+                ->get();
+
             return Inertia::render('Worker/Tests', [
                 'tests' => $tests,
                 'results' => $results,
@@ -43,12 +42,11 @@ class TestController extends Controller
         } else {
             // Для работников - только их тесты
             $tests = Test::all();
-            
+
             // Получаем результаты тестов текущего пользователя
             $results = TestResult::where('user_id', Auth::id())
                 ->with('test')
-                ->get()
-                ->keyBy('test_id');
+                ->get();
 
             return Inertia::render('Worker/Tests', [
                 'tests' => $tests,
@@ -69,13 +67,13 @@ class TestController extends Controller
         ]);
 
         // Определяем пользователя, для которого сохраняем результат
-        $userId = Auth::user()->role === 'worker' 
-            ? Auth::id() 
+        $userId = Auth::user()->role === 'worker'
+            ? Auth::id()
             : ($validated['user_id'] ?? Auth::id());
 
         // Получаем правильные ответы из теста
         $options = json_decode($test->options, true);
-        
+
         // Подсчитываем количество правильных ответов
         $score = 0;
         foreach ($validated['answers'] as $questionId => $answer) {

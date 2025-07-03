@@ -16,10 +16,14 @@ class TestResultSeeder extends Seeder
 
         foreach ($users as $user) {
             foreach ($tests as $test) {
+                // Решаем, будет ли score null (50% вероятность)
+                $score = (rand(0, 1) === 1) ? rand(0, 1) : null;
+
                 TestResult::firstOrCreate([
                     'test_id' => $test->id,
                     'user_id' => $user->id,
-                    'score' => rand(50, 100), // Случайный балл от 50 до 100
+                ], [
+                    'score' => $score,
                 ]);
             }
         }

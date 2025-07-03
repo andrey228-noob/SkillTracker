@@ -12,6 +12,13 @@ class Test extends Model
 
     protected $guarded = [];
 
+    protected function casts(): array
+    {
+        return [
+            'options' => 'array'
+        ];
+    }
+
     // Определяем связь с результатами тестов
     public function testResults(): HasMany
     {

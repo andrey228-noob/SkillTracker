@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
 const breadcrumbs = [
@@ -49,11 +49,9 @@ export default function Tests({ tests, results }) {
     }, 1000);
   };
 
-  console.log("results", results)
-
   const getTestStatus = (testId) => {
     const result = results.find(r => r.test_id === testId);
-    if (!result) return 'not_started';
+    if (result.score === null) return 'not_started';
     return 'completed';
   };
 
@@ -67,12 +65,12 @@ export default function Tests({ tests, results }) {
       <Head title="My Tests" />
       <div className="tests-page space-y-6">
         <h1 className="text-2xl font-bold">My Tests</h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tests.map((test) => {
-            // const status = getTestStatus(test.id);
-            // const score = getTestScore(test.id);
-            
+            const status = getTestStatus(test.id);
+            const score = getTestScore(test.id);
+
             return (
               <Card key={test.id} className="overflow-hidden">
                 <CardHeader className="pb-3">
@@ -105,8 +103,8 @@ export default function Tests({ tests, results }) {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button 
-                    onClick={() => openTest(test)} 
+                  <Button
+                    onClick={() => openTest(test)}
                     variant={status === 'completed' ? 'outline' : 'default'}
                     className="w-full"
                   >
@@ -135,22 +133,25 @@ export default function Tests({ tests, results }) {
                 <DialogDescription>{currentTest.description}</DialogDescription>
               </DialogHeader>
               <div className="space-y-6 py-4">
-                {JSON.parse(currentTest.options).map((question, index) => (
-                  <div key={index} className="space-y-3">
-                    <h3 className="font-medium">{index + 1}. {question.question}</h3>
-                    {/* <RadioGroup
-                      value={answers[question.id]}
-                      onValueChange={(value) => handleAnswerChange(question.id, value)}
-                    >
-                      {question.options.map((option, optIndex) => (
-                        <div key={optIndex} className="flex items-center space-x-2">
-                          <RadioGroupItem value={option.value} id={`q${question.id}-opt${optIndex}`} />
-                          <Label htmlFor={`q${question.id}-opt${optIndex}`}>{option.text}</Label>
-                        </div>
-                      ))}
-                    </RadioGroup> */}
-                  </div>
-                ))}
+                <div className="space-y-3">
+                  <h3 className="font-medium">{currentTest.options.question}</h3>
+                  <RadioGroup
+                    value={answers.selected}
+                    onValueChange={(value) => handleAnswerChange('selected', value)}
+                  >
+                    {currentTest.options.answers.map((answer, index) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={answer.value}
+                          id={`answer-${index}`}
+                        />
+                        <Label htmlFor={`answer-${index}`}>
+                          {answer.text}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsTestOpen(false)}>
