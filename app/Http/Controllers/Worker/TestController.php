@@ -58,36 +58,42 @@ class TestController extends Controller
 
     /**
      * Обрабатывает отправку теста
-     */
+    */
     public function submit(Request $request, Test $test)
     {
-        $validated = $request->validate([
-            'answers' => 'required|array',
-            'user_id' => 'nullable|exists:users,id'
+        $user = Auth::user();
+        
+        // Валидация входных данных
+        $request->validate([
+            'answer' => 'required|string',
         ]);
 
-        // Определяем пользователя, для которого сохраняем результат
-        $userId = Auth::user()->role === 'worker'
-            ? Auth::id()
-            : ($validated['user_id'] ?? Auth::id());
+        // Проверяем, существует ли уже результат для этого теста и пользователя
+        $testResult = TestResult::firstOrNew([
+            'test_id' => $test->id,
+            'user_id' => $user->id,
+        ]);
 
-        // Получаем правильные ответы из теста
-        $options = json_decode($test->options, true);
-
-        // Подсчитываем количество правильных ответов
-        $score = 0;
-        foreach ($validated['answers'] as $questionId => $answer) {
-            if (isset($options[$questionId]) && $options[$questionId]['correct'] === $answer) {
-                $score++;
-            }
+        // Если тест уже был пройден, возвращаем ошибку
+        if ($testResult->exists && !is_null($testResult->answer)) {
+            return back()->withErrors([
+                'message' => 'Вы уже проходили этот тест и не можете изменить ответ.',
+            ]);
         }
 
-        // Сохраняем результат теста
-        TestResult::updateOrCreate(
-            ['user_id' => $userId, 'test_id' => $test->id],
-            ['score' => $score]
-        );
+        // Проверяем правильность ответа
+        $isCorrect = $request->answer === $test->options['correct'];
+        $score = $isCorrect ? 1 : 0; // Можно настроить систему баллов по-другому
 
-        return redirect()->back()->with('success', 'Тест успешно отправлен');
+        // Сохраняем результат
+        $testResult->fill([
+            'answer' => $request->answer,
+            'score' => $score,
+        ])->save();
+
+        return back()->with([
+            'message' => 'Ваш ответ успешно сохранен!',
+            'score' => $score,
+        ]);
     }
 }

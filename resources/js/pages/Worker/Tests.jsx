@@ -1,5 +1,5 @@
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, useForm } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 import { FileText, CheckCircle, Clock } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
@@ -25,33 +25,43 @@ export default function Tests({ tests, results }) {
   const [currentTest, setCurrentTest] = useState(null);
   const [isTestOpen, setIsTestOpen] = useState(false);
   const [answers, setAnswers] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTestCompleted, setIsTestCompleted] = useState(false);
 
   const openTest = (test) => {
     setCurrentTest(test);
-    setAnswers({});
+    const result = results.find(r => r.test_id === test.id);
+    const isCompleted = result && result.answer !== null;
+    
+    setIsTestCompleted(isCompleted);
+    setAnswers(isCompleted ? { selected: result.answer } : {});
     setIsTestOpen(true);
   };
 
   const handleAnswerChange = (questionId, value) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: value
-    }));
+    if (isTestCompleted) return; // Блокируем изменение ответа для завершенных тестов
+    
+    setAnswers({
+      selected: value
+    });
+    setData('answer', value)
   };
 
+  const { setData, post, processing } = useForm({
+    answer: '',
+  });
+
   const submitTest = () => {
-    setIsSubmitting(true);
-    // Здесь будет отправка ответов на сервер
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsTestOpen(false);
-    }, 1000);
+    if (isTestCompleted) return; // Блокируем отправку для завершенных тестов
+    
+    post(route('worker.tests.submit', currentTest), {
+      onSuccess: () => setIsTestOpen(false),
+      onError: (errors) => console.error('Submission errors:', errors)
+    });
   };
 
   const getTestStatus = (testId) => {
     const result = results.find(r => r.test_id === testId);
-    if (result.score === null) return 'not_started';
+    if (!result || result.answer === null) return 'not_started';
     return 'completed';
   };
 
@@ -97,7 +107,8 @@ export default function Tests({ tests, results }) {
                     </div>
                     {status === 'completed' && (
                       <div className="text-sm font-medium">
-                        Score: <span className="text-green-600">{score}</span>
+                        <div>Score: <span className="text-green-600">{score}</span></div>
+                        <div>Your answer: <span className="text-blue-600">{results.find(r => r.test_id === test.id)?.answer}</span></div>
                       </div>
                     )}
                   </div>
@@ -138,12 +149,14 @@ export default function Tests({ tests, results }) {
                   <RadioGroup
                     value={answers.selected}
                     onValueChange={(value) => handleAnswerChange('selected', value)}
+                    disabled={isTestCompleted} // Блокируем радио-группу для завершенных тестов
                   >
                     {currentTest.options.answers.map((answer, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <RadioGroupItem
                           value={answer.value}
                           id={`answer-${index}`}
+                          disabled={isTestCompleted} // Блокируем отдельные радио-кнопки
                         />
                         <Label htmlFor={`answer-${index}`}>
                           {answer.text}
@@ -155,11 +168,16 @@ export default function Tests({ tests, results }) {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsTestOpen(false)}>
-                  Cancel
+                  Close
                 </Button>
-                <Button onClick={submitTest} disabled={isSubmitting}>
-                  {isSubmitting ? 'Submitting...' : 'Submit Test'}
-                </Button>
+                {!isTestCompleted && (
+                  <Button 
+                    onClick={submitTest} 
+                    disabled={processing || !answers.selected}
+                  >
+                    {processing ? 'Submitting...' : 'Submit Test'}
+                  </Button>
+                )}
               </DialogFooter>
             </DialogContent>
           </Dialog>

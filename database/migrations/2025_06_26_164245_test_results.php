@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('test_id')->constrained('tests'); // Тест
             $table->foreignId('user_id')->constrained('users'); // Работник
             $table->integer('score')->nullable(); // Баллы, полученные за тест
+            $table->string('answer')->nullable();
             $table->timestamps();
         });
     }

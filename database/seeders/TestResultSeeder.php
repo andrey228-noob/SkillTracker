@@ -17,7 +17,8 @@ class TestResultSeeder extends Seeder
         foreach ($users as $user) {
             foreach ($tests as $test) {
                 // Решаем, будет ли score null (50% вероятность)
-                $score = (rand(0, 1) === 1) ? rand(0, 1) : null;
+                // $score = (rand(0, 1) === 1) ? rand(0, 1) : null;
+                $score = null;
 
                 TestResult::firstOrCreate([
                     'test_id' => $test->id,

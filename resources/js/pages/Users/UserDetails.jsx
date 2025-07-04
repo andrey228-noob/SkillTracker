@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Plus, Edit, Trash, CheckCircle, XCircle, Clock } from 'lucide-react';
 
@@ -30,6 +30,7 @@ const breadcrumbs = [
 ];
 
 export default function UserDetails({ user, tests, tasks }) {
+  const { auth } = usePage().props;
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
@@ -40,6 +41,9 @@ export default function UserDetails({ user, tests, tasks }) {
     due_date: '',
     user_id: user.id,
   });
+
+  console.log('tasks', tasks)
+  console.log('auth.user.id', auth.user.id)
 
   const { data: editData, setData: setEditData, put, processing: editProcessing, errors: editErrors, reset: resetEdit } = useForm({
     id: '',
@@ -72,6 +76,11 @@ export default function UserDetails({ user, tests, tasks }) {
   };
 
   const openEditTask = (task) => {
+    if (task.manager_id !== auth.user.id) {
+      alert('Не вы создали эту задачу, не вам её и изменять!')
+      return; // Запрещаем изменение, если текущий пользователь не создатель задачи
+    }
+
     setCurrentTask(task);
     setEditData({
       id: task.id,
@@ -84,6 +93,11 @@ export default function UserDetails({ user, tests, tasks }) {
   };
 
   const deleteTask = (task) => {
+  if (task.manager_id !== auth.user.id) {
+    alert('Не вы создали эту задачу, не вам её и удалять!')
+    return; // Запрещаем удаление, если текущий пользователь не создатель задачи
+  }
+
     if (confirm('Are you sure you want to delete this task?')) {
       destroy(route('tasks.destroy', task.id), {
         onSuccess: () => {
@@ -229,6 +243,7 @@ export default function UserDetails({ user, tests, tasks }) {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Title</TableHead>
+                      <TableHead>Assigned By</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Due Date</TableHead>
                       <TableHead>Created</TableHead>
@@ -240,6 +255,9 @@ export default function UserDetails({ user, tests, tasks }) {
                       <TableRow key={task.id}>
                         <TableCell className="font-medium">{task.title}</TableCell>
                         <TableCell>
+                          {task.manager ? task.manager.name : 'Хрен знает кто дал такую задачу'}
+                        </TableCell>
+                        <TableCell>
                           <div className="flex items-center gap-2">
                             {getStatusIcon(task.status)}
                             {getStatusBadge(task.status)}
@@ -249,10 +267,10 @@ export default function UserDetails({ user, tests, tasks }) {
                         <TableCell>{new Date(task.created_at).toLocaleDateString()}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="icon" onClick={() => openEditTask(task)}>
+                            <Button variant="ghost" size="icon" className={task.manager_id === auth.user.id ? "" : "text-gray-400 cursor-not-allowed"} onClick={() => openEditTask(task)}>
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="text-red-500" onClick={() => deleteTask(task)}>
+                            <Button variant="ghost" size="icon" className={task.manager_id === auth.user.id ? "text-red-500 hover:text-red-600" : "text-gray-400 cursor-not-allowed"} onClick={() => deleteTask(task)}>
                               <Trash className="h-4 w-4" />
                             </Button>
                           </div>
