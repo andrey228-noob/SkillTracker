@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
 
@@ -10,21 +10,22 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const breadcrumbs = [
-  {
-    title: 'Панель управления',
-    href: '/dashboard',
-  },
-  {
-    title: 'Мои задачи',
-    href: '/worker/tasks',
-  },
-];
-
 export default function Tasks({ tasks }) {
   const [isViewTaskOpen, setIsViewTaskOpen] = useState(false);
   const [isUpdateStatusOpen, setIsUpdateStatusOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
+  const { auth } = usePage().props;
+
+  const breadcrumbs = [
+    {
+      title: 'Панель управления',
+      href: '/dashboard',
+    },
+    {
+      title: auth.user.role === 'worker' ? 'Мои задачи' : 'Задачи',
+      href: '/worker/tasks',
+    },
+  ];
 
   const { data, setData, put, processing, reset } = useForm({
     status: '',
@@ -83,9 +84,9 @@ export default function Tasks({ tasks }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Мои задачи" />
+      <Head title={auth.role === 'worker' ? 'Мои задачи' : 'Задачи'} />
       <div className="tasks-page space-y-6">
-        <h1 className="text-2xl font-bold">Мои задачи</h1>
+        <h1 className="text-2xl font-bold">{auth.role === 'worker' ? 'Мои задачи' : 'Задачи'}</h1>
 
         <Card>
           <CardHeader>

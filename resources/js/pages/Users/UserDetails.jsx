@@ -29,11 +29,15 @@ const breadcrumbs = [
   },
 ];
 
-export default function UserDetails({ user, tests, tasks }) {
+export default function UserDetails({ user, tests, tasks, results }) {
   const { auth } = usePage().props;
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [currentTask, setCurrentTask] = useState(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [taskToDelete, setTaskToDelete] = useState(null);
+  const [isAccessDeniedOpen, setIsAccessDeniedOpen] = useState(false);
+  const [accessDeniedMessage, setAccessDeniedMessage] = useState('');
 
   const { data, setData, post, processing, errors, reset } = useForm({
     title: '',
@@ -74,7 +78,8 @@ export default function UserDetails({ user, tests, tasks }) {
 
   const openEditTask = (task) => {
     if (task.manager_id !== auth.user.id) {
-      alert('Не вы создали эту задачу, не вам её и изменять!');
+      setAccessDeniedMessage('Не вы создали эту задачу, не вам её и изменять!');
+      setIsAccessDeniedOpen(true);
       return;
     }
 
@@ -91,17 +96,22 @@ export default function UserDetails({ user, tests, tasks }) {
 
   const deleteTask = (task) => {
     if (task.manager_id !== auth.user.id) {
-      alert('Не вы создали эту задачу, не вам её и удалять!');
+      setAccessDeniedMessage('Не вы создали эту задачу, не вам её и удалять!');
+      setIsAccessDeniedOpen(true);
       return;
     }
 
-    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
-      destroy(route('tasks.destroy', task.id), {
-        onSuccess: () => {
-          // Дополнительная логика после удаления
-        },
-      });
-    }
+    setTaskToDelete(task);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    destroy(route('tasks.destroy', taskToDelete.id), {
+      onSuccess: () => {
+        setIsDeleteConfirmOpen(false);
+        setTaskToDelete(null);
+      },
+    });
   };
 
   const getStatusBadge = (status) => {
@@ -232,6 +242,50 @@ export default function UserDetails({ user, tests, tasks }) {
                   </form>
                 </DialogContent>
               </Dialog>
+              {/* Диалог подтверждения удаления */}
+              <Dialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Подтверждение удаления</DialogTitle>
+                    <DialogDescription>
+                      Вы уверены, что хотите удалить задачу "{taskToDelete?.title}"?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsDeleteConfirmOpen(false)}
+                    >
+                      Отмена
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={confirmDelete}
+                    >
+                      Удалить
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              {/* Диалог ошибки доступа */}
+              <Dialog open={isAccessDeniedOpen} onOpenChange={setIsAccessDeniedOpen}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ошибка доступа</DialogTitle>
+                    <DialogDescription>
+                      {accessDeniedMessage}
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAccessDeniedOpen(false)}
+                    >
+                      Понятно
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <Card>
@@ -264,18 +318,18 @@ export default function UserDetails({ user, tests, tasks }) {
                         <TableCell>{new Date(task.created_at).toLocaleDateString()}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className={task.manager_id === auth.user.id ? "" : "text-gray-400 cursor-not-allowed"} 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className={task.manager_id === auth.user.id ? "" : "text-gray-400 cursor-not-allowed"}
                               onClick={() => openEditTask(task)}
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className={task.manager_id === auth.user.id ? "text-red-500 hover:text-red-600" : "text-gray-400 cursor-not-allowed"} 
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className={task.manager_id === auth.user.id ? "text-red-500 hover:text-red-600" : "text-gray-400 cursor-not-allowed"}
                               onClick={() => deleteTask(task)}
                             >
                               <Trash className="h-4 w-4" />
@@ -377,22 +431,84 @@ export default function UserDetails({ user, tests, tasks }) {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Тест</TableHead>
+                      <TableHead>Описание</TableHead>
+                      <TableHead>Статус</TableHead>
                       <TableHead>Результат</TableHead>
-                      <TableHead>Завершен</TableHead>
+                      <TableHead>Ответы</TableHead>
+                      <TableHead>Дата прохождения</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {tests.map((test) => (
-                      <TableRow key={test.id}>
-                        <TableCell className="font-medium">{test.title}</TableCell>
-                        <TableCell>{test.score !== null ? test.score : 'Не завершен'}</TableCell>
-                        <TableCell>{test.completed_at ? new Date(test.completed_at).toLocaleDateString() : 'Не завершен'}</TableCell>
-                      </TableRow>
-                    ))}
+                    {tests.map((test) => {
+                      // Находим результат текущего пользователя для этого теста
+                      const userResult = results.find(result =>
+                        result.test_id === test.id && result.user_id === user.id
+                      );
+
+                      // Определяем статус теста
+                      const getTestStatus = () => {
+                        if (!userResult) return 'Не начат';
+                        if (userResult.score === null) return 'В процессе';
+                        if (userResult.score === 0) return 'Неверно';
+                        if (userResult.score === 1) return 'Верно';
+                        return 'Неизвестно';
+                      };
+
+                      // Получаем соответствующий badge для статуса
+                      const getStatusBadge = () => {
+                        switch (getTestStatus()) {
+                          case 'Не начат':
+                            return <Badge variant="outline">Не начат</Badge>;
+                          case 'В процессе':
+                            return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В процессе</Badge>;
+                          case 'Верно':
+                            return <Badge className="bg-green-500 hover:bg-green-600">Верно</Badge>;
+                          case 'Неверно':
+                            return <Badge variant="destructive">Неверно</Badge>;
+                          default:
+                            return <Badge variant="outline">Неизвестно</Badge>;
+                        }
+                      };
+
+                      return (
+                        <TableRow key={test.id}>
+                          <TableCell className="font-medium">{test.title}</TableCell>
+                          <TableCell>{test.description}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {getStatusBadge()}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {userResult?.score !== null ? (
+                              <span>{userResult.score === 1 ? '100%' : '0%'}</span>
+                            ) : (
+                              '-'
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {userResult?.answer ? (
+                              <div className="max-w-xs truncate" title={userResult.answer}>
+                                {userResult.answer}
+                              </div>
+                            ) : (
+                              'Нет данных'
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {userResult?.created_at ? (
+                              new Date(userResult.created_at).toLocaleDateString()
+                            ) : (
+                              '-'
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                     {tests.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                          Тесты еще не пройдены
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          Тесты еще не назначены
                         </TableCell>
                       </TableRow>
                     )}

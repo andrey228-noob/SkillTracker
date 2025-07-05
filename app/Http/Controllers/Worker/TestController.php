@@ -62,7 +62,7 @@ class TestController extends Controller
     public function submit(Request $request, Test $test)
     {
         $user = Auth::user();
-        
+
         // Валидация входных данных
         $request->validate([
             'answer' => 'required|string',

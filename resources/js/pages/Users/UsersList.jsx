@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import { Search, UserCircle } from 'lucide-react';
 
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const breadcrumbs = [
   {
@@ -22,11 +23,33 @@ const breadcrumbs = [
 
 export default function UsersList({ users }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const { auth } = usePage().props;
+  const { setData, put } = useForm({
+    role: null,
+  });
 
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const updateUserRole = (userId, newRole) => {
+    setData('role', newRole);
+    put(route('users.update-role', userId));
+  };
+
+  const getRoleBadge = (role) => {
+    switch (role) {
+      case 'admin':
+        return <Badge variant="destructive">Администратор</Badge>;
+      case 'manager':
+        return <Badge variant="default">Менеджер</Badge>;
+      case 'worker':
+        return <Badge variant="outline">Работник</Badge>;
+      default:
+        return <Badge variant="outline">Неизвестно</Badge>;
+    }
+  };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -72,9 +95,23 @@ export default function UsersList({ users }) {
                     </TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
-                      <Badge variant={user.role === 'manager' ? 'default' : 'outline'}>
-                        {user.role === 'manager' ? 'Менеджер' : 'Работник'}
-                      </Badge>
+                      {auth.user.role === 'admin' ? (
+                        <Select
+                          value={user.role}
+                          onValueChange={(value) => updateUserRole(user.id, value)}
+                        >
+                          <SelectTrigger className="w-[150px]">
+                            <SelectValue placeholder="Выберите роль" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="admin">Администратор</SelectItem>
+                            <SelectItem value="manager">Менеджер</SelectItem>
+                            <SelectItem value="worker">Работник</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        getRoleBadge(user.role)
+                      )}
                     </TableCell>
                     <TableCell>{user.test_results_count || 0}</TableCell>
                     <TableCell>{user.average_score || 'Н/Д'}</TableCell>

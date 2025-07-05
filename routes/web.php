@@ -23,20 +23,18 @@ require __DIR__.'/auth.php';
 Route::middleware(['auth', 'role:manager,admin'])->group(function () {
     Route::get('/users', [ManagerUserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [ManagerUserController::class, 'show'])->name('users.show');
-    
+    Route::put('/users/{user}/role', [ManagerUserController::class, 'updateRole'])->name('users.update-role');
+
     Route::post('/tasks', [ManagerTaskController::class, 'store'])->name('tasks.store');
     Route::put('/tasks/{task}', [ManagerTaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [ManagerTaskController::class, 'destroy'])->name('tasks.destroy');
-    
-    // Добавляем доступ к тестам для менеджеров и администраторов
-    Route::get('/tests', [WorkerTestController::class, 'index'])->name('tests.index');
 });
 
 // Маршруты для рабочего
-Route::middleware(['auth', 'role:worker'])->prefix('worker')->name('worker.')->group(function () {
+Route::middleware(['auth'])->prefix('worker')->name('worker.')->group(function () {
     Route::get('/tests', [WorkerTestController::class, 'index'])->name('tests.index');
     Route::post('/tests/{test}/submit', [WorkerTestController::class, 'submit'])->name('tests.submit');
-    
+
     Route::get('/tasks', [WorkerTaskController::class, 'index'])->name('tasks.index');
     Route::put('/tasks/{task}/update-status', [WorkerTaskController::class, 'updateStatus'])->name('tasks.update-status');
 });

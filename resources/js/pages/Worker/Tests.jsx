@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import { FileText, CheckCircle, Clock } from 'lucide-react';
 
@@ -10,28 +10,29 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 
-const breadcrumbs = [
-  {
-    title: 'Панель управления',
-    href: '/dashboard',
-  },
-  {
-    title: 'Мои тесты',
-    href: '/worker/tests',
-  },
-];
-
 export default function Tests({ tests, results }) {
   const [currentTest, setCurrentTest] = useState(null);
   const [isTestOpen, setIsTestOpen] = useState(false);
   const [answers, setAnswers] = useState({});
   const [isTestCompleted, setIsTestCompleted] = useState(false);
+  const { auth } = usePage().props;
+
+  const breadcrumbs = [
+    {
+      title: 'Панель управления',
+      href: '/dashboard',
+    },
+    {
+      title: auth.user.role === 'worker' ? 'Мои тесты' : 'Тесты',
+      href: '/worker/tests',
+    },
+  ];
 
   const openTest = (test) => {
     setCurrentTest(test);
     const result = results.find(r => r.test_id === test.id);
     const isCompleted = result && result.answer !== null;
-    
+
     setIsTestCompleted(isCompleted);
     setAnswers(isCompleted ? { selected: result.answer } : {});
     setIsTestOpen(true);
@@ -39,7 +40,7 @@ export default function Tests({ tests, results }) {
 
   const handleAnswerChange = (questionId, value) => {
     if (isTestCompleted) return; // Блокируем изменение ответа для завершенных тестов
-    
+
     setAnswers({
       selected: value
     });
@@ -52,7 +53,7 @@ export default function Tests({ tests, results }) {
 
   const submitTest = () => {
     if (isTestCompleted) return; // Блокируем отправку для завершенных тестов
-    
+
     post(route('worker.tests.submit', currentTest), {
       onSuccess: () => setIsTestOpen(false),
       onError: (errors) => console.error('Submission errors:', errors)
@@ -72,9 +73,9 @@ export default function Tests({ tests, results }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Мои тесты" />
+      <Head title={auth.role === 'worker' ? 'Мои тесты' : 'Тесты'} />
       <div className="tests-page space-y-6">
-        <h1 className="text-2xl font-bold">Мои тесты</h1>
+        <h1 className="text-2xl font-bold">{auth.role === 'worker' ? 'Мои тесты' : 'Тесты'}</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tests.map((test) => {
@@ -171,8 +172,8 @@ export default function Tests({ tests, results }) {
                   Закрыть
                 </Button>
                 {!isTestCompleted && (
-                  <Button 
-                    onClick={submitTest} 
+                  <Button
+                    onClick={submitTest}
                     disabled={processing || !answers.selected}
                   >
                     {processing ? 'Отправка...' : 'Отправить тест'}

@@ -14,29 +14,6 @@ import { BookOpen, Folder, LayoutGrid, Menu } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from '@/components/shared/app-logo-icon';
 
-const mainNavItems = [
-  {
-    title: 'Главная',
-    href: '/dashboard',
-    icon: LayoutGrid,
-  },
-  {
-    title: 'Пользователи',
-    href: '/users',
-    icon: LayoutGrid,
-  },
-  {
-    title: 'Мои задачи',
-    href: '/worker/tasks',
-    icon: LayoutGrid,
-  },
-  {
-    title: 'Мои тесты',
-    href: '/worker/tests',
-    icon: LayoutGrid,
-  },
-];
-
 // const rightNavItems = [
 //   {
 //     title: 'Репозиторий',
@@ -56,6 +33,30 @@ export function AppHeader({ breadcrumbs = [] }) {
   const page = usePage();
   const { auth } = page.props;
   const getInitials = useInitials();
+
+  const mainNavItems = [
+    {
+      title: 'Главная',
+      href: '/dashboard',
+      icon: LayoutGrid,
+    },
+    {
+      title: 'Пользователи',
+      href: '/users',
+      icon: LayoutGrid,
+    },
+    {
+      title: auth.role === 'worker' ? 'Мои задачи' : 'Задачи',
+      href: '/worker/tasks',
+      icon: LayoutGrid,
+    },
+    {
+      title: auth.role === 'worker' ? 'Мои тесты' : 'Тесты',
+      href: '/worker/tests',
+      icon: LayoutGrid,
+    },
+  ];
+
   return (
     <>
       <div className="border-b border-sidebar-border/80">
