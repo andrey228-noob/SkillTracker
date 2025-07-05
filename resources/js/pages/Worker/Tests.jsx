@@ -12,11 +12,11 @@ import { Label } from '@/components/ui/label';
 
 const breadcrumbs = [
   {
-    title: 'Dashboard',
+    title: 'Панель управления',
     href: '/dashboard',
   },
   {
-    title: 'My Tests',
+    title: 'Мои тесты',
     href: '/worker/tests',
   },
 ];
@@ -72,9 +72,9 @@ export default function Tests({ tests, results }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="My Tests" />
+      <Head title="Мои тесты" />
       <div className="tests-page space-y-6">
-        <h1 className="text-2xl font-bold">My Tests</h1>
+        <h1 className="text-2xl font-bold">Мои тесты</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {tests.map((test) => {
@@ -96,19 +96,19 @@ export default function Tests({ tests, results }) {
                       {status === 'completed' ? (
                         <>
                           <CheckCircle className="h-4 w-4 text-green-500" />
-                          <Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge>
+                          <Badge variant="outline" className="bg-green-50 text-green-700">Завершено</Badge>
                         </>
                       ) : (
                         <>
                           <Clock className="h-4 w-4 text-yellow-500" />
-                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Not Started</Badge>
+                          <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Не начато</Badge>
                         </>
                       )}
                     </div>
                     {status === 'completed' && (
                       <div className="text-sm font-medium">
-                        <div>Score: <span className="text-green-600">{score}</span></div>
-                        <div>Your answer: <span className="text-blue-600">{results.find(r => r.test_id === test.id)?.answer}</span></div>
+                        <div>Балл: <span className="text-green-600">{score}</span></div>
+                        <div>Ваш ответ: <span className="text-blue-600">{results.find(r => r.test_id === test.id)?.answer}</span></div>
                       </div>
                     )}
                   </div>
@@ -119,7 +119,7 @@ export default function Tests({ tests, results }) {
                     variant={status === 'completed' ? 'outline' : 'default'}
                     className="w-full"
                   >
-                    {status === 'completed' ? 'Review Test' : 'Start Test'}
+                    {status === 'completed' ? 'Просмотреть тест' : 'Начать тест'}
                   </Button>
                 </CardFooter>
               </Card>
@@ -130,12 +130,12 @@ export default function Tests({ tests, results }) {
         {tests.length === 0 && (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-10">
-              <p className="text-muted-foreground text-center">No tests available at the moment.</p>
+              <p className="text-muted-foreground text-center">В данный момент нет доступных тестов.</p>
             </CardContent>
           </Card>
         )}
 
-        {/* Test Dialog */}
+        {/* Диалог теста */}
         {currentTest && (
           <Dialog open={isTestOpen} onOpenChange={setIsTestOpen}>
             <DialogContent className="max-w-3xl">
@@ -168,14 +168,14 @@ export default function Tests({ tests, results }) {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setIsTestOpen(false)}>
-                  Close
+                  Закрыть
                 </Button>
                 {!isTestCompleted && (
                   <Button 
                     onClick={submitTest} 
                     disabled={processing || !answers.selected}
                   >
-                    {processing ? 'Submitting...' : 'Submit Test'}
+                    {processing ? 'Отправка...' : 'Отправить тест'}
                   </Button>
                 )}
               </DialogFooter>

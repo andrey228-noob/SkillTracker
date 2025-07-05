@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const breadcrumbs = [
   {
-    title: 'Dashboard',
+    title: 'Панель управления',
     href: '/dashboard',
   },
   {
-    title: 'My Tasks',
+    title: 'Мои задачи',
     href: '/worker/tasks',
   },
 ];
@@ -54,15 +54,15 @@ export default function Tasks({ tasks }) {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Pending</Badge>;
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В ожидании</Badge>;
       case 'in_progress':
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700">In Progress</Badge>;
+        return <Badge variant="outline" className="bg-blue-50 text-blue-700">В процессе</Badge>;
       case 'completed':
-        return <Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge>;
+        return <Badge variant="outline" className="bg-green-50 text-green-700">Завершено</Badge>;
       case 'rejected':
-        return <Badge variant="outline" className="bg-red-50 text-red-700">Rejected</Badge>;
+        return <Badge variant="outline" className="bg-red-50 text-red-700">Отклонено</Badge>;
       default:
-        return <Badge variant="outline">Unknown</Badge>;
+        return <Badge variant="outline">Неизвестно</Badge>;
     }
   };
 
@@ -83,23 +83,23 @@ export default function Tasks({ tasks }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="My Tasks" />
+      <Head title="Мои задачи" />
       <div className="tasks-page space-y-6">
-        <h1 className="text-2xl font-bold">My Tasks</h1>
+        <h1 className="text-2xl font-bold">Мои задачи</h1>
 
         <Card>
           <CardHeader>
-            <CardTitle>Assigned Tasks</CardTitle>
+            <CardTitle>Назначенные задачи</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Due Date</TableHead>
-                  <TableHead>Assigned By</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Название</TableHead>
+                  <TableHead>Статус</TableHead>
+                  <TableHead>Срок выполнения</TableHead>
+                  <TableHead>Назначил</TableHead>
+                  <TableHead className="text-right">Действия</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -112,7 +112,7 @@ export default function Tasks({ tasks }) {
                         {getStatusBadge(task.status)}
                       </div>
                     </TableCell>
-                    <TableCell>{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'No deadline'}</TableCell>
+                    <TableCell>{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'Нет срока'}</TableCell>
                     <TableCell>{task.manager.name}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
@@ -125,7 +125,7 @@ export default function Tasks({ tasks }) {
                           onClick={() => openUpdateStatus(task)}
                           disabled={['completed', 'rejected'].includes(task.status)}
                         >
-                          Update Status
+                          Обновить статус
                         </Button>
                       </div>
                     </TableCell>
@@ -134,7 +134,7 @@ export default function Tasks({ tasks }) {
                 {tasks.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      No tasks assigned yet
+                      Задачи еще не назначены
                     </TableCell>
                   </TableRow>
                 )}
@@ -143,39 +143,39 @@ export default function Tasks({ tasks }) {
           </CardContent>
         </Card>
 
-        {/* View Task Dialog */}
+        {/* Диалог просмотра задачи */}
         <Dialog open={isViewTaskOpen} onOpenChange={setIsViewTaskOpen}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>{currentTask?.title}</DialogTitle>
               <DialogDescription>
-                Task details and information
+                Детали и информация о задаче
               </DialogDescription>
             </DialogHeader>
             {currentTask && (
               <div className="grid gap-4 py-4">
                 <div>
-                  <h3 className="text-sm font-medium">Description</h3>
+                  <h3 className="text-sm font-medium">Описание</h3>
                   <p className="mt-1">{currentTask.description}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <h3 className="text-sm font-medium">Status</h3>
+                    <h3 className="text-sm font-medium">Статус</h3>
                     <div className="mt-1 flex items-center gap-2">
                       {getStatusIcon(currentTask.status)}
                       {getStatusBadge(currentTask.status)}
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">Due Date</h3>
-                    <p className="mt-1">{currentTask.due_date ? new Date(currentTask.due_date).toLocaleDateString() : 'No deadline'}</p>
+                    <h3 className="text-sm font-medium">Срок выполнения</h3>
+                    <p className="mt-1">{currentTask.due_date ? new Date(currentTask.due_date).toLocaleDateString() : 'Нет срока'}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">Assigned By</h3>
+                    <h3 className="text-sm font-medium">Назначил</h3>
                     <p className="mt-1">{currentTask.manager.name}</p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium">Created</h3>
+                    <h3 className="text-sm font-medium">Создано</h3>
                     <p className="mt-1">{new Date(currentTask.created_at).toLocaleDateString()}</p>
                   </div>
                 </div>
@@ -183,53 +183,53 @@ export default function Tasks({ tasks }) {
             )}
             <DialogFooter>
               <Button onClick={() => setIsViewTaskOpen(false)}>
-                Close
+                Закрыть
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
 
-        {/* Update Status Dialog */}
+        {/* Диалог обновления статуса */}
         <Dialog open={isUpdateStatusOpen} onOpenChange={setIsUpdateStatusOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Update Task Status</DialogTitle>
+              <DialogTitle>Обновить статус задачи</DialogTitle>
               <DialogDescription>
-                Change the status of your task
+                Измените статус вашей задачи
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={updateTaskStatus}>
               <div className="grid gap-4 py-4">
                 <div>
-                  <h3 className="text-sm font-medium mb-2">Current Status</h3>
+                  <h3 className="text-sm font-medium mb-2">Текущий статус</h3>
                   <div className="flex items-center gap-2">
                     {currentTask && getStatusIcon(currentTask.status)}
                     {currentTask && getStatusBadge(currentTask.status)}
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium mb-2">New Status</h3>
+                  <h3 className="text-sm font-medium mb-2">Новый статус</h3>
                   <Select
                     value={data.status}
                     onValueChange={(value) => setData('status', value)}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue placeholder="Выберите статус" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="in_progress">In Progress</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="pending">В ожидании</SelectItem>
+                      <SelectItem value="in_progress">В процессе</SelectItem>
+                      <SelectItem value="completed">Завершено</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setIsUpdateStatusOpen(false)}>
-                  Cancel
+                  Отмена
                 </Button>
                 <Button type="submit" disabled={processing}>
-                  Update
+                  Обновить
                 </Button>
               </DialogFooter>
             </form>

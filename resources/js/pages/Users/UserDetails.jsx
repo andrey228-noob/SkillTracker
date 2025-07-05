@@ -16,15 +16,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const breadcrumbs = [
   {
-    title: 'Dashboard',
+    title: 'Главная',
     href: '/dashboard',
   },
   {
-    title: 'Users',
+    title: 'Пользователи',
     href: '/users',
   },
   {
-    title: 'User Details',
+    title: 'Детали пользователя',
     href: '/#',
   },
 ];
@@ -41,9 +41,6 @@ export default function UserDetails({ user, tests, tasks }) {
     due_date: '',
     user_id: user.id,
   });
-
-  console.log('tasks', tasks)
-  console.log('auth.user.id', auth.user.id)
 
   const { data: editData, setData: setEditData, put, processing: editProcessing, errors: editErrors, reset: resetEdit } = useForm({
     id: '',
@@ -77,8 +74,8 @@ export default function UserDetails({ user, tests, tasks }) {
 
   const openEditTask = (task) => {
     if (task.manager_id !== auth.user.id) {
-      alert('Не вы создали эту задачу, не вам её и изменять!')
-      return; // Запрещаем изменение, если текущий пользователь не создатель задачи
+      alert('Не вы создали эту задачу, не вам её и изменять!');
+      return;
     }
 
     setCurrentTask(task);
@@ -93,15 +90,15 @@ export default function UserDetails({ user, tests, tasks }) {
   };
 
   const deleteTask = (task) => {
-  if (task.manager_id !== auth.user.id) {
-    alert('Не вы создали эту задачу, не вам её и удалять!')
-    return; // Запрещаем удаление, если текущий пользователь не создатель задачи
-  }
+    if (task.manager_id !== auth.user.id) {
+      alert('Не вы создали эту задачу, не вам её и удалять!');
+      return;
+    }
 
-    if (confirm('Are you sure you want to delete this task?')) {
+    if (confirm('Вы уверены, что хотите удалить эту задачу?')) {
       destroy(route('tasks.destroy', task.id), {
         onSuccess: () => {
-          // Можно добавить дополнительную логику после успешного удаления
+          // Дополнительная логика после удаления
         },
       });
     }
@@ -110,15 +107,15 @@ export default function UserDetails({ user, tests, tasks }) {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">Pending</Badge>;
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В ожидании</Badge>;
       case 'in_progress':
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700">In Progress</Badge>;
+        return <Badge variant="outline" className="bg-blue-50 text-blue-700">В процессе</Badge>;
       case 'completed':
-        return <Badge variant="outline" className="bg-green-50 text-green-700">Completed</Badge>;
+        return <Badge variant="outline" className="bg-green-50 text-green-700">Завершено</Badge>;
       case 'rejected':
-        return <Badge variant="outline" className="bg-red-50 text-red-700">Rejected</Badge>;
+        return <Badge variant="outline" className="bg-red-50 text-red-700">Отклонено</Badge>;
       default:
-        return <Badge variant="outline">Unknown</Badge>;
+        return <Badge variant="outline">Неизвестно</Badge>;
     }
   };
 
@@ -139,7 +136,7 @@ export default function UserDetails({ user, tests, tasks }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={`User: ${user.name}`} />
+      <Head title={`Пользователь: ${user.name}`} />
       <div className="user-details space-y-6">
         <Card>
           <CardHeader>
@@ -149,19 +146,19 @@ export default function UserDetails({ user, tests, tasks }) {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <h3 className="text-sm font-medium">Role</h3>
-                <p>{user.role === 'manager' ? 'Manager' : 'Worker'}</p>
+                <h3 className="text-sm font-medium">Роль</h3>
+                <p>{user.role === 'manager' ? 'Менеджер' : 'Работник'}</p>
               </div>
               <div>
-                <h3 className="text-sm font-medium">Phone</h3>
-                <p>{user.phone || 'Not provided'}</p>
+                <h3 className="text-sm font-medium">Телефон</h3>
+                <p>{user.phone || 'Не указан'}</p>
               </div>
               <div>
-                <h3 className="text-sm font-medium">Gender</h3>
-                <p>{user.gender || 'Not provided'}</p>
+                <h3 className="text-sm font-medium">Пол</h3>
+                <p>{user.gender || 'Не указан'}</p>
               </div>
               <div>
-                <h3 className="text-sm font-medium">Joined</h3>
+                <h3 className="text-sm font-medium">Дата регистрации</h3>
                 <p>{new Date(user.created_at).toLocaleDateString()}</p>
               </div>
             </div>
@@ -170,51 +167,51 @@ export default function UserDetails({ user, tests, tasks }) {
 
         <Tabs defaultValue="tasks">
           <TabsList>
-            <TabsTrigger value="tasks">Tasks</TabsTrigger>
-            <TabsTrigger value="tests">Tests</TabsTrigger>
+            <TabsTrigger value="tasks">Задачи</TabsTrigger>
+            <TabsTrigger value="tests">Тесты</TabsTrigger>
           </TabsList>
 
           <TabsContent value="tasks" className="space-y-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Tasks</h2>
+              <h2 className="text-xl font-semibold">Задачи</h2>
               <Dialog open={isAddTaskOpen} onOpenChange={setIsAddTaskOpen}>
                 <DialogTrigger asChild>
                   <Button>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Task
+                    Добавить задачу
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Add New Task</DialogTitle>
+                    <DialogTitle>Добавить новую задачу</DialogTitle>
                     <DialogDescription>
-                      Create a new task for {user.name}.
+                      Создайте новую задачу для {user.name}.
                     </DialogDescription>
                   </DialogHeader>
                   <form onSubmit={submitTask}>
                     <div className="grid gap-4 py-4">
                       <div className="grid gap-2">
-                        <Label htmlFor="title">Title</Label>
+                        <Label htmlFor="title">Название</Label>
                         <Input
                           id="title"
                           value={data.title}
                           onChange={(e) => setData('title', e.target.value)}
-                          placeholder="Task title"
+                          placeholder="Название задачи"
                         />
                         {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                       </div>
                       <div className="grid gap-2">
-                        <Label htmlFor="description">Description</Label>
+                        <Label htmlFor="description">Описание</Label>
                         <Textarea
                           id="description"
                           value={data.description}
                           onChange={(e) => setData('description', e.target.value)}
-                          placeholder="Task description"
+                          placeholder="Описание задачи"
                         />
                         {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                       </div>
                       <div className="grid gap-2">
-                        <Label htmlFor="due_date">Due Date</Label>
+                        <Label htmlFor="due_date">Срок выполнения</Label>
                         <Input
                           id="due_date"
                           type="date"
@@ -226,10 +223,10 @@ export default function UserDetails({ user, tests, tasks }) {
                     </div>
                     <DialogFooter>
                       <Button type="button" variant="outline" onClick={() => setIsAddTaskOpen(false)}>
-                        Cancel
+                        Отмена
                       </Button>
                       <Button type="submit" disabled={processing}>
-                        Save
+                        Сохранить
                       </Button>
                     </DialogFooter>
                   </form>
@@ -242,12 +239,12 @@ export default function UserDetails({ user, tests, tasks }) {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Assigned By</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Due Date</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>Название</TableHead>
+                      <TableHead>Назначена</TableHead>
+                      <TableHead>Статус</TableHead>
+                      <TableHead>Срок</TableHead>
+                      <TableHead>Создана</TableHead>
+                      <TableHead className="text-right">Действия</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -255,7 +252,7 @@ export default function UserDetails({ user, tests, tasks }) {
                       <TableRow key={task.id}>
                         <TableCell className="font-medium">{task.title}</TableCell>
                         <TableCell>
-                          {task.manager ? task.manager.name : 'Хрен знает кто дал такую задачу'}
+                          {task.manager ? task.manager.name : 'Неизвестный менеджер'}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -263,14 +260,24 @@ export default function UserDetails({ user, tests, tasks }) {
                             {getStatusBadge(task.status)}
                           </div>
                         </TableCell>
-                        <TableCell>{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'No deadline'}</TableCell>
+                        <TableCell>{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'Без срока'}</TableCell>
                         <TableCell>{new Date(task.created_at).toLocaleDateString()}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="icon" className={task.manager_id === auth.user.id ? "" : "text-gray-400 cursor-not-allowed"} onClick={() => openEditTask(task)}>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className={task.manager_id === auth.user.id ? "" : "text-gray-400 cursor-not-allowed"} 
+                              onClick={() => openEditTask(task)}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" className={task.manager_id === auth.user.id ? "text-red-500 hover:text-red-600" : "text-gray-400 cursor-not-allowed"} onClick={() => deleteTask(task)}>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className={task.manager_id === auth.user.id ? "text-red-500 hover:text-red-600" : "text-gray-400 cursor-not-allowed"} 
+                              onClick={() => deleteTask(task)}
+                            >
                               <Trash className="h-4 w-4" />
                             </Button>
                           </div>
@@ -279,8 +286,8 @@ export default function UserDetails({ user, tests, tasks }) {
                     ))}
                     {tasks.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                          No tasks assigned yet
+                        <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                          Задачи еще не назначены
                         </TableCell>
                       </TableRow>
                     )}
@@ -289,39 +296,39 @@ export default function UserDetails({ user, tests, tasks }) {
               </CardContent>
             </Card>
 
-            {/* Edit Task Dialog */}
+            {/* Диалог редактирования задачи */}
             <Dialog open={isEditTaskOpen} onOpenChange={setIsEditTaskOpen}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Edit Task</DialogTitle>
+                  <DialogTitle>Редактировать задачу</DialogTitle>
                   <DialogDescription>
-                    Update task details for {user.name}.
+                    Обновите детали задачи для {user.name}.
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={submitEditTask}>
                   <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="edit-title">Title</Label>
+                      <Label htmlFor="edit-title">Название</Label>
                       <Input
                         id="edit-title"
                         value={editData.title}
                         onChange={(e) => setEditData('title', e.target.value)}
-                        placeholder="Task title"
+                        placeholder="Название задачи"
                       />
                       {editErrors.title && <p className="text-red-500 text-sm">{editErrors.title}</p>}
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="edit-description">Description</Label>
+                      <Label htmlFor="edit-description">Описание</Label>
                       <Textarea
                         id="edit-description"
                         value={editData.description}
                         onChange={(e) => setEditData('description', e.target.value)}
-                        placeholder="Task description"
+                        placeholder="Описание задачи"
                       />
                       {editErrors.description && <p className="text-red-500 text-sm">{editErrors.description}</p>}
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="edit-due_date">Due Date</Label>
+                      <Label htmlFor="edit-due_date">Срок выполнения</Label>
                       <Input
                         id="edit-due_date"
                         type="date"
@@ -331,19 +338,19 @@ export default function UserDetails({ user, tests, tasks }) {
                       {editErrors.due_date && <p className="text-red-500 text-sm">{editErrors.due_date}</p>}
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="edit-status">Status</Label>
+                      <Label htmlFor="edit-status">Статус</Label>
                       <Select
                         value={editData.status}
                         onValueChange={(value) => setEditData('status', value)}
                       >
                         <SelectTrigger id="edit-status">
-                          <SelectValue placeholder="Select status" />
+                          <SelectValue placeholder="Выберите статус" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="in_progress">In Progress</SelectItem>
-                          <SelectItem value="completed">Completed</SelectItem>
-                          <SelectItem value="rejected">Rejected</SelectItem>
+                          <SelectItem value="pending">В ожидании</SelectItem>
+                          <SelectItem value="in_progress">В процессе</SelectItem>
+                          <SelectItem value="completed">Завершено</SelectItem>
+                          <SelectItem value="rejected">Отклонено</SelectItem>
                         </SelectContent>
                       </Select>
                       {editErrors.status && <p className="text-red-500 text-sm">{editErrors.status}</p>}
@@ -351,10 +358,10 @@ export default function UserDetails({ user, tests, tasks }) {
                   </div>
                   <DialogFooter>
                     <Button type="button" variant="outline" onClick={() => setIsEditTaskOpen(false)}>
-                      Cancel
+                      Отмена
                     </Button>
                     <Button type="submit" disabled={editProcessing}>
-                      Update
+                      Обновить
                     </Button>
                   </DialogFooter>
                 </form>
@@ -363,29 +370,29 @@ export default function UserDetails({ user, tests, tasks }) {
           </TabsContent>
 
           <TabsContent value="tests" className="space-y-4">
-            <h2 className="text-xl font-semibold">Test Results</h2>
+            <h2 className="text-xl font-semibold">Результаты тестов</h2>
             <Card>
               <CardContent className="p-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Test</TableHead>
-                      <TableHead>Score</TableHead>
-                      <TableHead>Completed</TableHead>
+                      <TableHead>Тест</TableHead>
+                      <TableHead>Результат</TableHead>
+                      <TableHead>Завершен</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {tests.map((test) => (
                       <TableRow key={test.id}>
                         <TableCell className="font-medium">{test.title}</TableCell>
-                        <TableCell>{test.score !== null ? test.score : 'Not completed'}</TableCell>
-                        <TableCell>{test.completed_at ? new Date(test.completed_at).toLocaleDateString() : 'Not completed'}</TableCell>
+                        <TableCell>{test.score !== null ? test.score : 'Не завершен'}</TableCell>
+                        <TableCell>{test.completed_at ? new Date(test.completed_at).toLocaleDateString() : 'Не завершен'}</TableCell>
                       </TableRow>
                     ))}
                     {tests.length === 0 && (
                       <TableRow>
                         <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                          No tests completed yet
+                          Тесты еще не пройдены
                         </TableCell>
                       </TableRow>
                     )}

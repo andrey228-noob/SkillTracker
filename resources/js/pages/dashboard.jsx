@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 
 const breadcrumbs = [
   {
-    title: 'Dashboard',
+    title: 'Панель управления',
     href: '/dashboard',
   },
 ];
@@ -18,17 +18,17 @@ export default function Dashboard({ stats }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Dashboard" />
+      <Head title="Панель управления" />
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-        <h1 className="text-2xl font-bold mb-6">Welcome, {auth.user.name}</h1>
+        <h1 className="text-2xl font-bold mb-6">Добро пожаловать, {auth.user.name}</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 auto-rows-min">
           {isManager ? (
-            // Manager Dashboard Cards
+            // Карточки для менеджера
             <>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Total Workers</CardTitle>
+                  <CardTitle className="text-sm font-medium">Всего работников</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.workers_count || 0}</div>
@@ -37,7 +37,7 @@ export default function Dashboard({ stats }) {
                   <Button asChild variant="ghost" className="p-0 h-auto">
                     <Link href="/users" className="text-sm text-muted-foreground flex items-center">
                       <Users className="mr-1 h-4 w-4" />
-                      View all workers
+                      Просмотреть всех работников
                     </Link>
                   </Button>
                 </CardFooter>
@@ -45,7 +45,7 @@ export default function Dashboard({ stats }) {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Assigned Tasks</CardTitle>
+                  <CardTitle className="text-sm font-medium">Назначенные задачи</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.tasks_count || 0}</div>
@@ -54,7 +54,7 @@ export default function Dashboard({ stats }) {
                   <Button asChild variant="ghost" className="p-0 h-auto">
                     <Link href="/users" className="text-sm text-muted-foreground flex items-center">
                       <ListTodo className="mr-1 h-4 w-4" />
-                      Manage tasks
+                      Управление задачами
                     </Link>
                   </Button>
                 </CardFooter>
@@ -62,7 +62,7 @@ export default function Dashboard({ stats }) {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Completed Tests</CardTitle>
+                  <CardTitle className="text-sm font-medium">Завершенные тесты</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.completed_tests_count || 0}</div>
@@ -71,18 +71,18 @@ export default function Dashboard({ stats }) {
                   <Button asChild variant="ghost" className="p-0 h-auto">
                     <Link href="/users" className="text-sm text-muted-foreground flex items-center">
                       <CheckSquare className="mr-1 h-4 w-4" />
-                      View test results
+                      Просмотреть результаты тестов
                     </Link>
                   </Button>
                 </CardFooter>
               </Card>
             </>
           ) : (
-            // Worker Dashboard Cards
+            // Карточки для работника
             <>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">My Tasks</CardTitle>
+                  <CardTitle className="text-sm font-medium">Мои задачи</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.tasks_count || 0}</div>
@@ -91,7 +91,7 @@ export default function Dashboard({ stats }) {
                   <Button asChild variant="ghost" className="p-0 h-auto">
                     <Link href="/worker/tasks" className="text-sm text-muted-foreground flex items-center">
                       <ListTodo className="mr-1 h-4 w-4" />
-                      View my tasks
+                      Просмотреть мои задачи
                     </Link>
                   </Button>
                 </CardFooter>
@@ -99,7 +99,7 @@ export default function Dashboard({ stats }) {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">Available Tests</CardTitle>
+                  <CardTitle className="text-sm font-medium">Доступные тесты</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.available_tests_count || 0}</div>
@@ -108,7 +108,7 @@ export default function Dashboard({ stats }) {
                   <Button asChild variant="ghost" className="p-0 h-auto">
                     <Link href="/worker/tests" className="text-sm text-muted-foreground flex items-center">
                       <CheckSquare className="mr-1 h-4 w-4" />
-                      Take tests
+                      Пройти тесты
                     </Link>
                   </Button>
                 </CardFooter>
@@ -116,14 +116,14 @@ export default function Dashboard({ stats }) {
 
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium">My Average Score</CardTitle>
+                  <CardTitle className="text-sm font-medium">Мой средний балл</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stats?.average_score || 'N/A'}</div>
                 </CardContent>
                 <CardFooter>
                   <p className="text-sm text-muted-foreground">
-                    Based on {stats?.completed_tests_count || 0} completed tests
+                    На основе {stats?.completed_tests_count || 0} завершенных тестов
                   </p>
                 </CardFooter>
               </Card>
@@ -134,9 +134,11 @@ export default function Dashboard({ stats }) {
         <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
           <Card>
             <CardHeader>
-              <CardTitle>{isManager ? 'Recent Activity' : 'My Progress'}</CardTitle>
+              <CardTitle>{isManager ? 'Последняя активность' : 'Мой прогресс'}</CardTitle>
               <CardDescription>
-                {isManager ? 'Recent actions and updates from your team' : 'Your recent test results and task updates'}
+                {isManager 
+                  ? 'Последние действия и обновления от вашей команды' 
+                  : 'Ваши последние результаты тестов и обновления задач'}
               </CardDescription>
             </CardHeader>
             <CardContent>

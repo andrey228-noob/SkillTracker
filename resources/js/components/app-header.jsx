@@ -16,39 +16,39 @@ import AppLogoIcon from '@/components/shared/app-logo-icon';
 
 const mainNavItems = [
   {
-    title: 'Dashboard',
+    title: 'Главная',
     href: '/dashboard',
     icon: LayoutGrid,
   },
   {
-    title: 'Users',
+    title: 'Пользователи',
     href: '/users',
     icon: LayoutGrid,
   },
   {
-    title: 'My Tasks',
+    title: 'Мои задачи',
     href: '/worker/tasks',
     icon: LayoutGrid,
   },
   {
-    title: 'My Tests',
+    title: 'Мои тесты',
     href: '/worker/tests',
     icon: LayoutGrid,
   },
 ];
 
-const rightNavItems = [
-  {
-    title: 'Repository',
-    href: 'https://github.com/laravel/react-starter-kit',
-    icon: Folder,
-  },
-  {
-    title: 'Documentation',
-    href: 'https://laravel.com/docs/starter-kits#react',
-    icon: BookOpen,
-  },
-];
+// const rightNavItems = [
+//   {
+//     title: 'Репозиторий',
+//     href: 'https://github.com/laravel/react-starter-kit',
+//     icon: Folder,
+//   },
+//   {
+//     title: 'Документация',
+//     href: 'https://laravel.com/docs/starter-kits#react',
+//     icon: BookOpen,
+//   },
+// ];
 
 const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
@@ -60,7 +60,7 @@ export function AppHeader({ breadcrumbs = [] }) {
     <>
       <div className="border-b border-sidebar-border/80">
         <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
-          {/* Mobile Menu */}
+          {/* Мобильное меню */}
           <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
@@ -69,7 +69,7 @@ export function AppHeader({ breadcrumbs = [] }) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar">
-                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                <SheetTitle className="sr-only">Меню навигации</SheetTitle>
                 <SheetHeader className="flex justify-start text-left">
                   <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
                 </SheetHeader>
@@ -84,7 +84,7 @@ export function AppHeader({ breadcrumbs = [] }) {
                       ))}
                     </div>
 
-                    <div className="flex flex-col space-y-4">
+                    {/* <div className="flex flex-col space-y-4">
                       {rightNavItems.map((item) => (
                         <a
                           key={item.title}
@@ -97,7 +97,7 @@ export function AppHeader({ breadcrumbs = [] }) {
                           <span>{item.title}</span>
                         </a>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </SheetContent>
@@ -108,7 +108,7 @@ export function AppHeader({ breadcrumbs = [] }) {
             <AppLogo />
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Навигация для десктопа */}
           <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
             <NavigationMenu className="flex h-full items-stretch">
               <NavigationMenuList className="flex h-full items-stretch space-x-2">
@@ -135,7 +135,7 @@ export function AppHeader({ breadcrumbs = [] }) {
           </div>
 
           <div className="ml-auto flex items-center space-x-2">
-            <div className="relative flex items-center space-x-1">
+            {/* <div className="relative flex items-center space-x-1">
               <div className="hidden lg:flex">
                 {rightNavItems.map((item) => (
                   <TooltipProvider key={item.title} delayDuration={0}>
@@ -158,7 +158,7 @@ export function AppHeader({ breadcrumbs = [] }) {
                   </TooltipProvider>
                 ))}
               </div>
-            </div>
+            </div> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="size-10 rounded-full p-1">

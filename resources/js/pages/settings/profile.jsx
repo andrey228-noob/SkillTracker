@@ -12,7 +12,7 @@ import SettingsLayout from '@/layouts/settings-layout';
 
 const breadcrumbs = [
   {
-    title: 'Profile settings',
+    title: 'Настройки профиля',
     href: '/settings/profile',
   },
 ];
@@ -35,15 +35,18 @@ export default function Profile({ mustVerifyEmail, status }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Profile settings" />
+      <Head title="Настройки профиля" />
 
       <SettingsLayout>
         <div className="space-y-6">
-          <HeadingSmall title="Profile information" description="Update your name and email address" />
+          <HeadingSmall 
+            title="Информация профиля" 
+            description="Обновите ваше имя и адрес электронной почты" 
+          />
 
           <form onSubmit={submit} className="space-y-6">
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">Имя</Label>
 
               <Input
                 id="name"
@@ -52,14 +55,14 @@ export default function Profile({ mustVerifyEmail, status }) {
                 onChange={(e) => setData('name', e.target.value)}
                 required
                 autoComplete="name"
-                placeholder="Full name"
+                placeholder="Полное имя"
               />
 
               <InputError className="mt-2" message={errors.name} />
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email">Адрес электронной почты</Label>
 
               <Input
                 id="email"
@@ -69,7 +72,7 @@ export default function Profile({ mustVerifyEmail, status }) {
                 onChange={(e) => setData('email', e.target.value)}
                 required
                 autoComplete="username"
-                placeholder="Email address"
+                placeholder="Email адрес"
               />
 
               <InputError className="mt-2" message={errors.email} />
@@ -78,27 +81,27 @@ export default function Profile({ mustVerifyEmail, status }) {
             {mustVerifyEmail && auth.user.email_verified_at === null && (
               <div>
                 <p className="-mt-4 text-sm text-muted-foreground">
-                  Your email address is unverified.{' '}
+                  Ваш адрес электронной почты не подтверждён.{' '}
                   <Link
                     href={route('verification.send')}
                     method="post"
                     as="button"
                     className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                   >
-                    Click here to resend the verification email.
+                    Нажмите здесь, чтобы отправить письмо с подтверждением повторно.
                   </Link>
                 </p>
 
                 {status === 'verification-link-sent' && (
                   <div className="mt-2 text-sm font-medium text-green-600">
-                    A new verification link has been sent to your email address.
+                    Новое письмо с подтверждением было отправлено на ваш адрес электронной почты.
                   </div>
                 )}
               </div>
             )}
 
             <div className="flex items-center gap-4">
-              <Button disabled={processing}>Save</Button>
+              <Button disabled={processing}>Сохранить</Button>
 
               <Transition
                 show={recentlySuccessful}
@@ -107,7 +110,7 @@ export default function Profile({ mustVerifyEmail, status }) {
                 leave="transition ease-in-out"
                 leaveTo="opacity-0"
               >
-                <p className="text-sm text-neutral-600">Saved</p>
+                <p className="text-sm text-neutral-600">Сохранено</p>
               </Transition>
             </div>
           </form>

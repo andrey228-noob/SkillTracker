@@ -11,11 +11,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 const breadcrumbs = [
   {
-    title: 'Dashboard',
+    title: 'Главная',
     href: '/dashboard',
   },
   {
-    title: 'Users',
+    title: 'Пользователи',
     href: '/users',
   },
 ];
@@ -30,17 +30,17 @@ export default function UsersList({ users }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Users List" />
+      <Head title="Список пользователей" />
       <div className="users-list">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Users</CardTitle>
+            <CardTitle>Пользователи</CardTitle>
             <div className="flex items-center gap-2">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search users..."
+                  placeholder="Поиск пользователей..."
                   className="pl-8"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -52,13 +52,13 @@ export default function UsersList({ users }) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
+                  <TableHead>Имя</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Tests Completed</TableHead>
-                  <TableHead>Avg. Score</TableHead>
-                  <TableHead>Tasks</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Роль</TableHead>
+                  <TableHead>Тестов пройдено</TableHead>
+                  <TableHead>Средний балл</TableHead>
+                  <TableHead>Задачи</TableHead>
+                  <TableHead className="text-right">Действия</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -73,15 +73,15 @@ export default function UsersList({ users }) {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
                       <Badge variant={user.role === 'manager' ? 'default' : 'outline'}>
-                        {user.role === 'manager' ? 'Manager' : 'Worker'}
+                        {user.role === 'manager' ? 'Менеджер' : 'Работник'}
                       </Badge>
                     </TableCell>
                     <TableCell>{user.test_results_count || 0}</TableCell>
-                    <TableCell>{user.average_score || 'N/A'}</TableCell>
+                    <TableCell>{user.average_score || 'Н/Д'}</TableCell>
                     <TableCell>{user.tasks_count || 0}</TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="ghost" size="sm">
-                        <Link href={`/users/${user.id}`}>View</Link>
+                        <Link href={`/users/${user.id}`}>Просмотр</Link>
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -89,7 +89,7 @@ export default function UsersList({ users }) {
                 {filteredUsers.length === 0 && (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No users found
+                      Пользователи не найдены
                     </TableCell>
                   </TableRow>
                 )}
