@@ -87,7 +87,7 @@ class DashboardController extends Controller
                     ->where('status', 'rejected')
                     ->count(),
                 'tests_count' => Test::count(),
-                'completed_tests_count' => TestResult::where('user_id', $user->id)->count(),
+                'completed_tests_count' => TestResult::where('user_id', $user->id)->whereNotNull('score')->count(),
                 'completion_rate' => round(($completedTasks / $totalTasks) * 100),
             ];
             
