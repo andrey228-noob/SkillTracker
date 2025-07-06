@@ -117,6 +117,6 @@
     "include": [
         "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
-        "resources/js/**/*.tsx",
+        "resources/js/**/*.tsx", "resources/js/hooks/use-appearance.jsx", "resources/js/hooks/use-initials.tsx", "resources/js/hooks/use-mobile-navigation.js", "resources/js/layouts/app/app-sidebar-layout.jsx", "resources/js/layouts/auth/auth-split-layout.jsx", "resources/js/layouts/auth/auth-simple-layout.jsx", "resources/js/layouts/auth/auth-card-layout.jsx", "resources/js/layouts/settings/layout.jsx", "resources/js/app.jsx",
     ]
 }

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'gender',
     ];
 
     /**
@@ -44,5 +48,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    
+    // Определяем связь с результатами тестов
+    public function testResults(): HasMany
+    {
+        return $this->hasMany(TestResult::class);
+    }
+    
+    // Определяем связь с задачами (для работника)
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+    
+    // Определяем связь с задачами (для менеджера)
+    public function assignedTasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'manager_id');
     }
 }
