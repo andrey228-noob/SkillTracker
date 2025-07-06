@@ -14,7 +14,7 @@ export default function Register() {
     email: '',
     password: '',
     password_confirmation: '',
-    role: null,
+    //role: null,
   });
 
   const submit = (e) => {
@@ -66,7 +66,7 @@ export default function Register() {
             <InputError message={errors.email} />
           </div>
 
-          <div className="grid gap-2">
+          {/* <div className="grid gap-2">
             <Label htmlFor="role">Роль</Label>
             <Select
               value={data.role}
@@ -82,7 +82,7 @@ export default function Register() {
               </SelectContent>
             </Select>
             <InputError message={errors.role} />
-          </div>
+          </div> */}
 
           <div className="grid gap-2">
             <Label htmlFor="password">Пароль</Label>

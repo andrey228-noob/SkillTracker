@@ -44,18 +44,19 @@ export function AppHeader({ breadcrumbs = [] }) {
       title: 'Пользователи',
       href: '/users',
       icon: LayoutGrid,
+      show: auth.user.role !== 'worker'
     },
     {
-      title: auth.role === 'worker' ? 'Мои задачи' : 'Задачи',
+      title: auth.user.role === 'worker' ? 'Мои задачи' : 'Задачи',
       href: '/worker/tasks',
       icon: LayoutGrid,
     },
     {
-      title: auth.role === 'worker' ? 'Мои тесты' : 'Тесты',
+      title: auth.user.role === 'worker' ? 'Мои тесты' : 'Тесты',
       href: '/worker/tests',
       icon: LayoutGrid,
     },
-  ];
+  ].filter(item => item.show !== false);
 
   return (
     <>
@@ -72,7 +73,8 @@ export function AppHeader({ breadcrumbs = [] }) {
               <SheetContent side="left" className="flex h-full w-64 flex-col items-stretch justify-between bg-sidebar">
                 <SheetTitle className="sr-only">Меню навигации</SheetTitle>
                 <SheetHeader className="flex justify-start text-left">
-                  <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
+                  {/* <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" /> */}
+                  <AppLogoIcon />
                 </SheetHeader>
                 <div className="flex h-full flex-1 flex-col space-y-4 p-4">
                   <div className="flex h-full flex-col justify-between text-sm">

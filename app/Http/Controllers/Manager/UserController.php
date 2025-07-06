@@ -73,9 +73,9 @@ class UserController extends Controller
         $user->update(['role' => $validated['role']]);
 
         // Возвращаем обновленного пользователя
-        return response()->json([
-            'user' => $user->fresh(),
-            'message' => 'Роль пользователя обновлена'
-        ]);
+        // return response()->json([
+        //     'user' => $user->fresh(),
+        //     'message' => 'Роль пользователя обновлена'
+        // ]);
     }
 }

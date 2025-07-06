@@ -1,5 +1,5 @@
 import { Head, Link, usePage, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, UserCircle } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
@@ -24,7 +24,7 @@ const breadcrumbs = [
 export default function UsersList({ users }) {
   const [searchTerm, setSearchTerm] = useState('');
   const { auth } = usePage().props;
-  const { setData, put } = useForm({
+  const { data, setData, put, processing, errors } = useForm({
     role: null,
   });
 
@@ -33,9 +33,28 @@ export default function UsersList({ users }) {
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const [pendingUpdate, setPendingUpdate] = useState(null);
+
+  useEffect(() => {
+    if (pendingUpdate) {
+      const { userId, newRole } = pendingUpdate;
+      put(route('users.update-role', userId), {
+        onSuccess: (response) => {
+          console.log('Роль была изменена', response)
+          setPendingUpdate(null);
+        },
+        onError: (errors) => {
+          console.error('Ошибка при обновлении роли:', errors);
+          setPendingUpdate(null);
+        },
+        preserveScroll: true,
+      });
+    }
+  }, [data.role, pendingUpdate]);
+
   const updateUserRole = (userId, newRole) => {
     setData('role', newRole);
-    put(route('users.update-role', userId));
+    setPendingUpdate({ userId, newRole });
   };
 
   const getRoleBadge = (role) => {
