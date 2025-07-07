@@ -114,7 +114,8 @@ export default function UserDetails({ user, tests, tasks, results }) {
     });
   };
 
-  const getStatusBadge = (status) => {
+  // Переименовано для задач
+  const getTaskStatusBadge = (status) => {
     switch (status) {
       case 'pending':
         return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В ожидании</Badge>;
@@ -141,6 +142,30 @@ export default function UserDetails({ user, tests, tasks, results }) {
         return <XCircle className="h-4 w-4 text-red-500" />;
       default:
         return null;
+    }
+  };
+
+  // Функции для обработки тестов
+  const getTestStatus = (userResult) => {
+    if (!userResult) return 'Не начат';
+    if (userResult.score === null) return 'В процессе';
+    if (userResult.score === 0) return 'Неверно';
+    if (userResult.score === 1) return 'Верно';
+    return 'Неизвестно';
+  };
+
+  const getTestStatusBadge = (status) => {
+    switch (status) {
+      case 'Не начат':
+        return <Badge variant="outline">Не начат</Badge>;
+      case 'В процессе':
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В процессе</Badge>;
+      case 'Верно':
+        return <Badge className="bg-green-500 hover:bg-green-600">Верно</Badge>;
+      case 'Неверно':
+        return <Badge variant="destructive">Неверно</Badge>;
+      default:
+        return <Badge variant="outline">Неизвестно</Badge>;
     }
   };
 
@@ -311,7 +336,7 @@ export default function UserDetails({ user, tests, tasks, results }) {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             {getStatusIcon(task.status)}
-                            {getStatusBadge(task.status)}
+                            {getTaskStatusBadge(task.status)} {/* Исправлено имя функции */}
                           </div>
                         </TableCell>
                         <TableCell>{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'Без срока'}</TableCell>
@@ -440,35 +465,13 @@ export default function UserDetails({ user, tests, tasks, results }) {
                   </TableHeader>
                   <TableBody>
                     {tests.map((test) => {
-                      // Находим результат текущего пользователя для этого теста
-                      const userResult = results.find(result =>
-                        result.test_id === test.id && result.user_id === user.id
-                      );
+                      // Безопасный поиск результатов
+                      const userResult = results.find(
+                        result => result.test_id === test.id && result.user_id === user.id
+                      ) || null;
 
-                      // Определяем статус теста
-                      const getTestStatus = () => {
-                        if (!userResult) return 'Не начат';
-                        if (userResult.score === null) return 'В процессе';
-                        if (userResult.score === 0) return 'Неверно';
-                        if (userResult.score === 1) return 'Верно';
-                        return 'Неизвестно';
-                      };
-
-                      // Получаем соответствующий badge для статуса
-                      const getStatusBadge = () => {
-                        switch (getTestStatus()) {
-                          case 'Не начат':
-                            return <Badge variant="outline">Не начат</Badge>;
-                          case 'В процессе':
-                            return <Badge variant="outline" className="bg-yellow-50 text-yellow-700">В процессе</Badge>;
-                          case 'Верно':
-                            return <Badge className="bg-green-500 hover:bg-green-600">Верно</Badge>;
-                          case 'Неверно':
-                            return <Badge variant="destructive">Неверно</Badge>;
-                          default:
-                            return <Badge variant="outline">Неизвестно</Badge>;
-                        }
-                      };
+                      // Определение статуса теста
+                      const testStatus = getTestStatus(userResult);
 
                       return (
                         <TableRow key={test.id}>
@@ -476,11 +479,11 @@ export default function UserDetails({ user, tests, tasks, results }) {
                           <TableCell>{test.description}</TableCell>
                           <TableCell>
                             <div className="flex items-center gap-2">
-                              {getStatusBadge()}
+                              {getTestStatusBadge(testStatus)}
                             </div>
                           </TableCell>
                           <TableCell>
-                            {userResult?.score !== null ? (
+                            {userResult?.score !== null && userResult?.score !== undefined ? (
                               <span>{userResult.score === 1 ? '100%' : '0%'}</span>
                             ) : (
                               '-'
